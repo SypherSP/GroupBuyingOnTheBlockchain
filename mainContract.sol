@@ -27,6 +27,7 @@ contract mainContract {
     }
 
     struct product {
+        string name;
         string pID;
         string manufacturerID;
         string description;
@@ -82,33 +83,41 @@ contract mainContract {
     }
 
     function addGroup(
-        string memory pID,
-        int maxSubscription,
-        int unitValue
-    ) public isManufacturer {
-        lastGroupID = lastGroupID + 1;
-        string memory groupID = uintToString(lastGroupID);
-        group memory newGroup = group({
-            pID: pID,
-            listOfSubscribers: new address[](0),
-            maxSubscription: maxSubscription,
-            currentSubscription: 0,
-            unitValue: unitValue,
-            isValue: true
-        });
-        groupList[groupID] = newGroup;
-        manufacturerList[msg.sender].groupIDS.push(groupID);
-    }
+    string memory pID,
+    int maxSubscription,
+    int unitValue
+) public isManufacturer {
+    require(productList[pID].isValue, "Product does not exist");
+    require(
+        keccak256(abi.encodePacked(manufacturerList[msg.sender].manufacturerID)) ==
+            keccak256(abi.encodePacked(productList[pID].manufacturerID)),
+        "You are not the owner of the product"
+    );
+
+    lastGroupID = lastGroupID + 1;
+    string memory groupID = uintToString(lastGroupID);
+    group memory newGroup = group({
+        pID: pID,
+        listOfSubscribers: new address[](0),
+        maxSubscription: maxSubscription,
+        currentSubscription: 0,
+        unitValue: unitValue,
+        isValue: true
+    });
+    groupList[groupID] = newGroup;
+    manufacturerList[msg.sender].groupIDS.push(groupID);
+}
 
     function addProduct(
-        string memory manufacturerID,
+        string memory name,
         string memory description
     ) public isManufacturer {
         lastProductID = lastProductID + 1;
         string memory pID = uintToString(lastProductID);
         product memory newProduct = product({
+            name: name,
             pID: pID,
-            manufacturerID: manufacturerID,
+            manufacturerID: manufacturerList[msg.sender].manufacturerID,
             description: description,
             isValue: true
         });
@@ -135,3 +144,4 @@ contract mainContract {
         return string(buffer);
     }
 }
+
