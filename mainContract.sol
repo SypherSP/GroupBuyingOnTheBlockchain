@@ -143,5 +143,19 @@ contract mainContract {
         }
         return string(buffer);
     }
-}
 
+    function getProductsByManufacturer(address manufacturerAddress) public view returns (product[] memory) {
+        require(manufacturerList[manufacturerAddress].isValue, "Manufacturer does not exist");
+
+        uint256 productCount = manufacturerList[manufacturerAddress].productIDs.length;
+        product[] memory products = new product[](productCount);
+
+        for (uint256 i = 0; i < productCount; i++) {
+            string memory pID = manufacturerList[manufacturerAddress].productIDs[i];
+            products[i] = productList[pID];
+        }
+
+        return products;
+    }
+
+}
