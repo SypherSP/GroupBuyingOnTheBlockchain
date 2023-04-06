@@ -35,7 +35,7 @@ contract mainContract {
     }
 
     struct customer {
-        string[] groups;
+        string[] groupIDs;
         bool isValue;
     }
 
@@ -83,30 +83,31 @@ contract mainContract {
     }
 
     function addGroup(
-    string memory pID,
-    int maxSubscription,
-    int unitValue
-) public isManufacturer {
-    require(productList[pID].isValue, "Product does not exist");
-    require(
-        keccak256(abi.encodePacked(manufacturerList[msg.sender].manufacturerID)) ==
-            keccak256(abi.encodePacked(productList[pID].manufacturerID)),
-        "You are not the owner of the product"
-    );
+        string memory pID,
+        int maxSubscription,
+        int unitValue
+    ) public isManufacturer {
+        require(productList[pID].isValue, "Product does not exist");
+        require(
+            keccak256(
+                abi.encodePacked(manufacturerList[msg.sender].manufacturerID)
+            ) == keccak256(abi.encodePacked(productList[pID].manufacturerID)),
+            "You are not the manufacturer of the product"
+        );
 
-    lastGroupID = lastGroupID + 1;
-    string memory groupID = uintToString(lastGroupID);
-    group memory newGroup = group({
-        pID: pID,
-        listOfSubscribers: new address[](0),
-        maxSubscription: maxSubscription,
-        currentSubscription: 0,
-        unitValue: unitValue,
-        isValue: true
-    });
-    groupList[groupID] = newGroup;
-    manufacturerList[msg.sender].groupIDS.push(groupID);
-}
+        lastGroupID = lastGroupID + 1;
+        string memory groupID = uintToString(lastGroupID);
+        group memory newGroup = group({
+            pID: pID,
+            listOfSubscribers: new address[](0),
+            maxSubscription: maxSubscription,
+            currentSubscription: 0,
+            unitValue: unitValue,
+            isValue: true
+        });
+        groupList[groupID] = newGroup;
+        manufacturerList[msg.sender].groupIDS.push(groupID);
+    }
 
     function addProduct(
         string memory name,
@@ -144,18 +145,45 @@ contract mainContract {
         return string(buffer);
     }
 
-    function getProductsByManufacturer(address manufacturerAddress) public view returns (product[] memory) {
-        require(manufacturerList[manufacturerAddress].isValue, "Manufacturer does not exist");
+    function getProductsByManufacturer(
+        address manufacturerAddress
+    ) public view returns (product[] memory) {
+        require(
+            manufacturerList[manufacturerAddress].isValue,
+            "Manufacturer does not exist"
+        );
 
-        uint256 productCount = manufacturerList[manufacturerAddress].productIDs.length;
+        uint256 productCount = manufacturerList[manufacturerAddress]
+            .productIDs
+            .length;
         product[] memory products = new product[](productCount);
 
         for (uint256 i = 0; i < productCount; i++) {
-            string memory pID = manufacturerList[manufacturerAddress].productIDs[i];
+            string memory pID = manufacturerList[manufacturerAddress]
+                .productIDs[i];
             products[i] = productList[pID];
         }
 
         return products;
     }
 
+    function getProductsByCustomer(
+        address customerAddress
+    ) public view isCustomer returns (product[] memory) {
+        require(
+            customerList[customerAddress].isValue,
+            "Customer does not exist"
+        );
+
+        uint256 productCount = customerList[customerAddress].groupIDs.length;
+        product[] memory products = new product[](productCount);
+
+        for (uint256 i = 0; i < productCount; i++) {
+            string memory groupID = customerList[customerAddress].groupIDs[i];
+            string memory pID = groupList[groupID].pID;
+            products[i] = productList[pID];
+        }
+
+        return products;
+    }
 }
