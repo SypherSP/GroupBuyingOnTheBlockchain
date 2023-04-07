@@ -186,4 +186,42 @@ contract mainContract {
 
         return products;
     }
+
+    function registerCustomer() public {
+        require(!customerList[msg.sender].isValue, "Customer already registered");
+
+        customer memory newCustomer = customer({
+            groups: new string[](0),
+            isValue: true
+        });
+
+        customerList[msg.sender] = newCustomer;
+    }
+
+    function joinGroup(string memory groupID) public isCustomer {
+        require(groupList[groupID].isValue, "Group does not exist");
+        require(groupList[groupID].currentSubscription < groupList[groupID].maxSubscription, "Group is full");
+
+        groupList[groupID].listOfSubscribers.push(msg.sender);
+        groupList[groupID].currentSubscription++;
+        customerList[msg.sender].groups.push(groupID);
+    }
+
+    function getCustomerGroups(address customerAddress) public view returns (string[] memory) {
+        require(customerList[customerAddress].isValue, "Customer does not exist");
+
+        return customerList[customerAddress].groups;
+    }
+
+    function closeGroup(string memory groupID) public isManufacturer {
+        require(groupList[groupID].isValue, "Group does not exist");
+        require(groupList[groupID].currentSubscription == groupList[groupID].maxSubscription, "Group is not full yet");
+
+        // Implement the group buying action, e.g., transfer funds, update product quantities, etc.
+
+        groupList[groupID].isValue = false; // Mark the group as closed
+    }
+
+
+
 }
