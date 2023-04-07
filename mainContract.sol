@@ -191,7 +191,7 @@ contract mainContract {
         require(!customerList[msg.sender].isValue, "Customer already registered");
 
         customer memory newCustomer = customer({
-            groups: new string[](0),
+            groupIDs: new string[](0),
             isValue: true
         });
 
@@ -204,13 +204,13 @@ contract mainContract {
 
         groupList[groupID].listOfSubscribers.push(msg.sender);
         groupList[groupID].currentSubscription++;
-        customerList[msg.sender].groups.push(groupID);
+        customerList[msg.sender].groupIDs.push(groupID);
     }
 
     function getCustomerGroups(address customerAddress) public view returns (string[] memory) {
         require(customerList[customerAddress].isValue, "Customer does not exist");
 
-        return customerList[customerAddress].groups;
+        return customerList[customerAddress].groupIDs;
     }
 
     function closeGroup(string memory groupID) public isManufacturer {
