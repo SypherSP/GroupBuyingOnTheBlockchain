@@ -14,6 +14,8 @@ contract mainContract {
         int maxSubscription;
         int currentSubscription;
         int unitValue;
+        uint256 accumulatedPayment;
+        bool isOpen;
         bool isValue;
     }
 
@@ -103,6 +105,8 @@ contract mainContract {
             maxSubscription: maxSubscription,
             currentSubscription: 0,
             unitValue: unitValue,
+            accumulatedPayment: 0,
+            isOpen: true,
             isValue: true
         });
         groupList[groupID] = newGroup;
@@ -215,13 +219,38 @@ contract mainContract {
 
     function closeGroup(string memory groupID) public isManufacturer {
         require(groupList[groupID].isValue, "Group does not exist");
-        require(groupList[groupID].currentSubscription == groupList[groupID].maxSubscription, "Group is not full yet");
+        require(groupList[groupID].isOpen, "Group is already closed");
 
-        // Implement the group buying action, e.g., transfer funds, update product quantities, etc.
-
-        groupList[groupID].isValue = false; // Mark the group as closed
+        groupList[groupID].isOpen = false;
     }
 
+    function joinGroupAndPay(string memory groupID) public payable isCustomer {
+        require(groupList[groupID].isValue, "Group does not exist");
+        require(groupList[groupID].isOpen, "Group is closed");
+        require(groupList[groupID].currentSubscription < groupList[groupID].maxSubscription, "Group is full");
+        require(msg.value == uint256(groupList[groupID].unitValue), "Incorrect payment amount");
+
+        groupList[groupID].listOfSubscribers.push(msg.sender);
+        groupList[groupID].currentSubscription++;
+        customerList[msg.sender].groupIDs.push(groupID);
+
+        groupList[groupID].accumulatedPayment += msg.value;
+    }
+
+    function claimEscrowedFunds(string memory groupID) public isManufacturer {
+        require(groupList[groupID].isValue, "Group does not exist");
+        require(!groupList[groupID].isOpen, "Group is not closed yet");
+require(
+    keccak256(abi.encodePacked(manufacturerList[msg.sender].manufacturerID)) ==
+    keccak256(abi.encodePacked(productList[groupList[groupID].pID].manufacturerID)),
+    "You are not the owner of the product in this group"
+);
+        uint256 escrowedFunds = groupList[groupID].accumulatedPayment;
+        groupList[groupID].accumulatedPayment = 0;
+
+        (bool success, ) = msg.sender.call{value: escrowedFunds}("");
+        require(success, "Withdrawal failed");
+    }
 
 
 }
