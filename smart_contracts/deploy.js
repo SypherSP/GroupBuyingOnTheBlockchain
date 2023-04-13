@@ -1,5 +1,5 @@
 const {web3, myAccount} = require('./utils')
-const { bytecode } = require('../Groupbuying/src/contractArtifacts')
+const { bytecode } = require('./contractArtifacts')
 
 async function deploy(){
     await web3.eth.sendTransaction({
