@@ -9,12 +9,12 @@ contract mainContract {
     uint256 lastCustomerID = 0;
 
     struct group {
-        string pID;
-        address[] listOfSubscribers;
-        int maxSubscription;
-        int currentSubscription;
-        int unitValue;
-        uint256 accumulatedPayment;
+        string pID; //product ID
+        address[] listOfSubscribers; //list of customers subscribed to the group
+        uint maxSubscription; //max subscription possible
+        uint currentSubscription;
+        uint unitValue; //value of one unit of the substance
+        uint256 accumulatedPayment; //total payment in the group
         bool isOpen;
         bool isValue;
     }
@@ -24,7 +24,7 @@ contract mainContract {
         string name;
         string[] productIDs;
         string[] groupIDS;
-        // mapping(string => int) unitPrices;
+        uint256 totalRevenue; //total revenue generated for a manufacturer across all closed groups
         bool isValue;
     }
 
@@ -41,16 +41,24 @@ contract mainContract {
         bool isValue;
     }
 
-    mapping(string => product) productList;
-    mapping(address => manufacturer) manufacturerList;
-    mapping(string => group) groupList;
-    mapping(address => customer) customerList;
+    mapping(string => product) productList; //list of all
+    mapping(address => manufacturer) manufacturerList; //list of all manufacturers
+    mapping(string => group) groupList; //list of all groups
+    mapping(address => customer) customerList; //list of all customers
+    mapping(string => mapping(address => uint256)) paymentRecords; //mapping (groupID, customer address) to number of uints subscribed in that group
 
     event setOwner(address OldOwner, address Owner);
+    event fundTransfer(address from, address to, uint amount);
+    event Log(string func, uint gas);
+
 
     constructor() {
         owner = msg.sender;
         emit setOwner(address(0), owner);
+    }
+
+    fallback() external payable {
+        emit Log("fallback", gasleft());
     }
 
     modifier isOwner() {
@@ -68,6 +76,26 @@ contract mainContract {
         _;
     }
 
+    //utility function to convert int to string
+    function uintToString(uint256 value) private pure returns (string memory) {
+        if (value == 0) {
+            return "0";
+        }
+        uint256 temp = value;
+        uint256 digits;
+        while (temp != 0) {
+            digits++;
+            temp /= 10;
+        }
+        bytes memory buffer = new bytes(digits);
+        while (value != 0) {
+            digits--;
+            buffer[digits] = bytes1(uint8(48 + (value % 10)));
+            value /= 10;
+        }
+        return string(buffer);
+    }
+
     function addManufacturer(
         address payable manufacturerAddress,
         string memory name
@@ -79,6 +107,7 @@ contract mainContract {
             name: name,
             productIDs: new string[](0),
             groupIDS: new string[](0),
+            totalRevenue: 0,
             isValue: true
         });
         manufacturerList[manufacturerAddress] = newManufacturer;
@@ -86,8 +115,8 @@ contract mainContract {
 
     function addGroup(
         string memory pID,
-        int maxSubscription,
-        int unitValue
+        uint maxSubscription,
+        uint unitValue
     ) public isManufacturer {
         require(productList[pID].isValue, "Product does not exist");
         require(
@@ -130,25 +159,7 @@ contract mainContract {
         manufacturerList[msg.sender].productIDs.push(pID);
     }
 
-    function uintToString(uint256 value) private pure returns (string memory) {
-        if (value == 0) {
-            return "0";
-        }
-        uint256 temp = value;
-        uint256 digits;
-        while (temp != 0) {
-            digits++;
-            temp /= 10;
-        }
-        bytes memory buffer = new bytes(digits);
-        while (value != 0) {
-            digits--;
-            buffer[digits] = bytes1(uint8(48 + (value % 10)));
-            value /= 10;
-        }
-        return string(buffer);
-    }
-
+    //returns all products registered by a manufacturer
     function getProductsByManufacturer(
         address manufacturerAddress
     ) public view returns (product[] memory) {
@@ -171,6 +182,7 @@ contract mainContract {
         return products;
     }
 
+    //returns all the products a customer has subscribed to
     function getProductsByCustomer(
         address customerAddress
     ) public view isCustomer returns (product[] memory) {
@@ -192,7 +204,10 @@ contract mainContract {
     }
 
     function registerCustomer() public {
-        require(!customerList[msg.sender].isValue, "Customer already registered");
+        require(
+            !customerList[msg.sender].isValue,
+            "Customer already registered"
+        );
 
         customer memory newCustomer = customer({
             groupIDs: new string[](0),
@@ -202,19 +217,41 @@ contract mainContract {
         customerList[msg.sender] = newCustomer;
     }
 
-    function joinGroup(string memory groupID) public isCustomer {
+    //returns list of groupIDs a customer is in
+    function getCustomerGroups(
+        address customerAddress
+    ) public view returns (string[] memory) {
+        require(
+            customerList[customerAddress].isValue,
+            "Customer does not exist"
+        );
+
+        return customerList[customerAddress].groupIDs;
+    }
+
+    //customer joins group and pays for the number of uints they want to subscribe to
+    function joinGroupAndPay(
+        string memory groupID,
+        uint256 units
+    ) public payable isCustomer {
         require(groupList[groupID].isValue, "Group does not exist");
-        require(groupList[groupID].currentSubscription < groupList[groupID].maxSubscription, "Group is full");
+        require(groupList[groupID].isOpen, "Group is closed");
+        require(
+            groupList[groupID].currentSubscription <
+                groupList[groupID].maxSubscription,
+            "Group is full"
+        );
+        uint256 requiredVal = (groupList[groupID].unitValue) * units;
+        require(msg.value == requiredVal, "Incorrect payment amount");
+
+        emit fundTransfer(msg.sender, (this).address, msg.value);
 
         groupList[groupID].listOfSubscribers.push(msg.sender);
         groupList[groupID].currentSubscription++;
         customerList[msg.sender].groupIDs.push(groupID);
-    }
+        paymentRecords[groupID][msg.sender] = units;
+        groupList[groupID].accumulatedPayment += msg.value;
 
-    function getCustomerGroups(address customerAddress) public view returns (string[] memory) {
-        require(customerList[customerAddress].isValue, "Customer does not exist");
-
-        return customerList[customerAddress].groupIDs;
     }
 
     function closeGroup(string memory groupID) public isManufacturer {
@@ -224,33 +261,34 @@ contract mainContract {
         groupList[groupID].isOpen = false;
     }
 
-    function joinGroupAndPay(string memory groupID) public payable isCustomer {
-        require(groupList[groupID].isValue, "Group does not exist");
-        require(groupList[groupID].isOpen, "Group is closed");
-        require(groupList[groupID].currentSubscription < groupList[groupID].maxSubscription, "Group is full");
-        require(msg.value == uint256(groupList[groupID].unitValue), "Incorrect payment amount");
-
-        groupList[groupID].listOfSubscribers.push(msg.sender);
-        groupList[groupID].currentSubscription++;
-        customerList[msg.sender].groupIDs.push(groupID);
-
-        groupList[groupID].accumulatedPayment += msg.value;
-    }
-
     function claimEscrowedFunds(string memory groupID) public isManufacturer {
         require(groupList[groupID].isValue, "Group does not exist");
         require(!groupList[groupID].isOpen, "Group is not closed yet");
-require(
-    keccak256(abi.encodePacked(manufacturerList[msg.sender].manufacturerID)) ==
-    keccak256(abi.encodePacked(productList[groupList[groupID].pID].manufacturerID)),
-    "You are not the owner of the product in this group"
-);
+        require(
+            keccak256(
+                abi.encodePacked(manufacturerList[msg.sender].manufacturerID)
+            ) ==
+                keccak256(
+                    abi.encodePacked(
+                        productList[groupList[groupID].pID].manufacturerID
+                    )
+                ),
+            "You are not the manufacturer of the product in this group"
+        );
         uint256 escrowedFunds = groupList[groupID].accumulatedPayment;
         groupList[groupID].accumulatedPayment = 0;
 
+        //reseting the payment record for each customer in the group
+        // uint size= groupList[groupID].listOfSubscribers.length;
+        // for(uint i=0; i<size;i++){
+        //     paymentRecords[groupID][groupList[groupID].listOfSubscribers[i]]=0;
+        // }
+
         (bool success, ) = msg.sender.call{value: escrowedFunds}("");
         require(success, "Withdrawal failed");
+        emit fundTransfer((this).address, msg.sender, escrowedFunds);
     }
 
-
+    function leaveGroup(string memory groupID) public isCustomer{}
+    function 
 }
