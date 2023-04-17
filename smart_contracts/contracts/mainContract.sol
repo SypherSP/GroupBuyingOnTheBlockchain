@@ -51,7 +51,6 @@ contract mainContract {
     event fundTransfer(address from, address to, uint amount);
     event Log(string func, uint gas);
 
-
     constructor() {
         owner = msg.sender;
         emit setOwner(address(0), owner);
@@ -59,6 +58,10 @@ contract mainContract {
 
     fallback() external payable {
         emit Log("fallback", gasleft());
+    }
+
+    receive() external payable {
+        emit Log("receive", gasleft());
     }
 
     modifier isOwner() {
@@ -244,14 +247,13 @@ contract mainContract {
         uint256 requiredVal = (groupList[groupID].unitValue) * units;
         require(msg.value == requiredVal, "Incorrect payment amount");
 
-        emit fundTransfer(msg.sender, (this).address, msg.value);
+        emit fundTransfer(msg.sender, address(this), msg.value);
 
         groupList[groupID].listOfSubscribers.push(msg.sender);
         groupList[groupID].currentSubscription++;
         customerList[msg.sender].groupIDs.push(groupID);
         paymentRecords[groupID][msg.sender] = units;
         groupList[groupID].accumulatedPayment += msg.value;
-
     }
 
     function closeGroup(string memory groupID) public isManufacturer {
@@ -286,9 +288,8 @@ contract mainContract {
 
         (bool success, ) = msg.sender.call{value: escrowedFunds}("");
         require(success, "Withdrawal failed");
-        emit fundTransfer((this).address, msg.sender, escrowedFunds);
+        emit fundTransfer(address(this), msg.sender, escrowedFunds);
     }
 
-    function leaveGroup(string memory groupID) public isCustomer{}
-    function 
+    function leaveGroup(string memory groupID) public isCustomer {}
 }
