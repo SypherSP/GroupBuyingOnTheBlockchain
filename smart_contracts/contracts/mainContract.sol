@@ -99,6 +99,15 @@ contract mainContract {
         return string(buffer);
     }
 
+    function getUseCategory(address user) public view returns(string memory){
+        if(manufacturerList[user].isValue)
+            return "manufacturer";
+        else if(customerList[user].isValue)
+            return "customer";
+        else 
+            return "not registered";
+    }
+
     function addManufacturer(
         address payable manufacturerAddress,
         string memory name
