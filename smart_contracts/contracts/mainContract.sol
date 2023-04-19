@@ -43,6 +43,7 @@ contract mainContract {
 
     mapping(string => product) productList; //list of all
     mapping(address => manufacturer) manufacturerList; //list of all manufacturers
+    address[] manufacturerAddresses;
     mapping(string => group) groupList; //list of all groups
     mapping(address => customer) customerList; //list of all customers
     mapping(string => mapping(address => uint256)) paymentRecords; //mapping (groupID, customer address) to number of uints subscribed in that group
@@ -99,13 +100,10 @@ contract mainContract {
         return string(buffer);
     }
 
-    function getUseCategory(address user) public view returns(string memory){
-        if(manufacturerList[user].isValue)
-            return "manufacturer";
-        else if(customerList[user].isValue)
-            return "customer";
-        else 
-            return "not registered";
+    function getUseCategory(address user) public view returns (string memory) {
+        if (manufacturerList[user].isValue) return "manufacturer";
+        else if (customerList[user].isValue) return "customer";
+        else return "not registered";
     }
 
     function addManufacturer(
@@ -123,6 +121,7 @@ contract mainContract {
             isValue: true
         });
         manufacturerList[manufacturerAddress] = newManufacturer;
+        manufacturerAddresses.push(manufacturerAddress);
     }
 
     function addGroup(
@@ -169,6 +168,21 @@ contract mainContract {
         });
         productList[pID] = newProduct;
         manufacturerList[msg.sender].productIDs.push(pID);
+    }
+
+    function getAllManufacturers()
+        public
+        view
+        isOwner
+        returns (manufacturer[] memory)
+    {
+        manufacturer[] memory listOfManufacturers = new manufacturer[](
+            manufacturerAddresses.length
+        );
+        for (uint256 i = 0; i < manufacturerAddresses.length; i++) {
+            listOfManufacturers[i] = manufacturerList[manufacturerAddresses[i]];
+        }
+        return listOfManufacturers;
     }
 
     //returns all products registered by a manufacturer
