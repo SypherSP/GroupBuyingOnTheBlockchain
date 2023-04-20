@@ -23,7 +23,7 @@ contract mainContract {
         string manufacturerID;
         string name;
         string[] productIDs;
-        string[] groupIDS;
+        string[] groupIDs;
         uint256 totalRevenue; //total revenue generated for a manufacturer across all closed groups
         bool isValue;
     }
@@ -102,7 +102,7 @@ contract mainContract {
     }
 
     function getUseCategory(address user) public view returns (string memory) {
-        if(user==owner) return "owner";
+        if (user == owner) return "owner";
         else if (manufacturerList[user].isValue) return "manufacturer";
         else if (customerList[user].isValue) return "customer";
         else return "not registered";
@@ -118,7 +118,7 @@ contract mainContract {
             manufacturerID: manufacturerID,
             name: name,
             productIDs: new string[](0),
-            groupIDS: new string[](0),
+            groupIDs: new string[](0),
             totalRevenue: 0,
             isValue: true
         });
@@ -152,7 +152,7 @@ contract mainContract {
             isValue: true
         });
         groupList[groupID] = newGroup;
-        manufacturerList[msg.sender].groupIDS.push(groupID);
+        manufacturerList[msg.sender].groupIDs.push(groupID);
     }
 
     function addProduct(
@@ -210,6 +210,19 @@ contract mainContract {
         }
 
         return products;
+    }
+
+    function getGroupsByManufacturer(
+        address manufacturerAddress
+    ) public view returns (group[] memory) {
+        uint length = manufacturerList[manufacturerAddress].groupIDs.length;
+        group[] memory groups = new group[](length);
+        for (uint i = 0; i < length; i++) {
+            groups[i] = groupList[
+                manufacturerList[manufacturerAddress].groupIDs[i]
+            ];
+        }
+        return groups;
     }
 
     //returns all the products a customer has subscribed to
