@@ -33,6 +33,7 @@ contract mainContract {
         string pID;
         string manufacturerID;
         string description;
+        uint retailPrice;
         bool isValue;
     }
 
@@ -101,7 +102,8 @@ contract mainContract {
     }
 
     function getUseCategory(address user) public view returns (string memory) {
-        if (manufacturerList[user].isValue) return "manufacturer";
+        if(user==owner) return "owner";
+        else if (manufacturerList[user].isValue) return "manufacturer";
         else if (customerList[user].isValue) return "customer";
         else return "not registered";
     }
@@ -155,7 +157,8 @@ contract mainContract {
 
     function addProduct(
         string memory name,
-        string memory description
+        string memory description,
+        uint retailPrice
     ) public isManufacturer {
         lastProductID = lastProductID + 1;
         string memory pID = uintToString(lastProductID);
@@ -164,6 +167,7 @@ contract mainContract {
             pID: pID,
             manufacturerID: manufacturerList[msg.sender].manufacturerID,
             description: description,
+            retailPrice: retailPrice,
             isValue: true
         });
         productList[pID] = newProduct;
