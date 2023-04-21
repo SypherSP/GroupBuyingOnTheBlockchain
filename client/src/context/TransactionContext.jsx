@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ethers } from 'ethers';
 import { abi } from '../../../smart_contracts/contractArtifacts';
 const { ethereum } = window;
@@ -12,7 +12,8 @@ export const TransactionsProvider = ({ children }) => {
     const [currentAccount, setCurrentAccount] = useState("");
     const [manufacturer, setManufacturer] = useState({ "address": '', "name": '' });
     const [product, setProduct] = useState({ "name": '', "description": '' });
-    
+    const [group, setGroup] = useState({pID:"",  maxSubscription: 0, unitValue: 0})
+    const [userCategory, setUserCategory] = useState("manufacturer");
     const handleChange = (e, changeType) => {
         const { name, value } = e.target
         if(changeType === "manufacturer") setManufacturer((prevData) => ({
@@ -21,15 +22,33 @@ export const TransactionsProvider = ({ children }) => {
         else if(changeType === "product") setProduct((prevData) => ({
             ...prevData, [name]: value
         }))
+        else if(changeType === "group") setGroup((prevData) => ({
+            ...prevData, [name]: value
+        }))
+    }
+    const handlePIDChange = (value) => {
+        setGroup((prevData) => ({
+            ...prevData,
+            pID: value
+        }))
     }
 
+    useEffect(() => {
+        async function getDetails() {
+            const provider = new ethers.BrowserProvider(ethereum);
+            const contract = new ethers.Contract(contractAddress, contractAbi, provider);
+            const tx = await contract.getUseCategory(currentAccount);
+            console.log(tx)
+            setUserCategory(tx);
+        }
+        if(currentAccount !== '')getDetails();
+    },[currentAccount])
 
     const connectWallet = async () => {
         try {
             if (!ethereum) return alert("Please install MetaMask.");
 
             const accounts = await ethereum.request({ method: "eth_requestAccounts", });
-
             setCurrentAccount(accounts[0]);
         } catch (error) {
             console.log(error);
@@ -38,58 +57,73 @@ export const TransactionsProvider = ({ children }) => {
         }
     };
 
+    const getDetails = async () => {
+        const provider = new ethers.BrowserProvider(ethereum);
+        const contract = new ethers.Contract(contractAddress,contractAbi,provider);
+        const tx = await contract.getUserCategory(currentAccount);
+        await tx.wait()
+        setUserCategory(tx);
+    }
+
+    const getAllManufacturer = async () => {
+        const provider = new ethers.BrowserProvider(ethereum);
+        const contract = new ethers.Contract(contractAddress, contractAbi, provider);
+        // const tx = await contract.getAllManufacturer();
+        // return tx;
+    }
+
     const addManufacturer = async () => {
         const provider = new ethers.BrowserProvider(ethereum);
         const signer = await provider.getSigner();
         const contract = new ethers.Contract(contractAddress, contractAbi, signer)
-        console.log(manufacturer.address, manufacturer.name)
         const tx = await contract.addManufacturer(manufacturer.address, manufacturer.name)
         await tx.wait();
         console.log("Added");
         return tx.hash;
     }
-    const addGroup = async (pID, maxSubscription, unitValue) => {
+    const addGroup = async () => {
         const provider = new ethers.BrowserProvider(ethereum);
-        const signer = provider.getSigner();
+        const signer = await provider.getSigner();
         const contract = new ethers.Contract(contractAddress, contractAbi, signer)
-        const tx = await contract.addGroup(pID, maxSubscription, unitValue);
+        const tx = await contract.addGroup(group.pID, group.maxSubscription, group.unitValue);
         await tx.wait();
         console.log("Added");
         return tx.hash;
     }
     const addProduct = async () => {
         const provider = new ethers.BrowserProvider(ethereum);
-        const signer = provider.getSigner();
+        const signer = await provider.getSigner();
         const contract = new ethers.Contract(contractAddress, contractAbi, signer);
+        console.log(signer)
         const tx = await contract.addProduct(product.name, product.description);
         await tx.wait();
         console.log("Added");
         return tx.hash;
     }
-    const getProductsByManufacturer = async (manufacturerAddress) => {
+    const getProductsByManufacturer = async () => {
         const provider = new ethers.BrowserProvider(ethereum);
-        // const signer = provider.getSigner();
+        // const signer = await provider.getSigner();
         const contract = new ethers.Contract(contractAddress, contractAbi, provider);
-        const tx = await contract.getProductsByManufacturer(manufacturerAddress);
+        const tx = await contract.getProductsByManufacturer(currentAccount);
         return tx;
     }
     const getProductsByCustomer = async (customerAddress) => {
         const provider = new ethers.BrowserProvider(ethereum);
-        // const signer = provider.getSigner();
+        // const signer = await provider.getSigner();
         const contract = new ethers.Contract(contractAddress, contractAbi, provider);
         const tx = await contract.getProductsByCustomer(customerAddress);
         return tx;
     }
-    const registerCustomer = () => {
+    const registerCustomer = async () => {
         const provider = new ethers.BrowserProvider(ethereum);
-        const signer = provider.getSigner();
+        const signer = await provider.getSigner();
         const contract = new ethers.Contract(contractAddress, contractAbi, signer);
         const tx = contract.registerCustomer();
         return tx.hash;
     }
     const joinGroup = async (groupID) => {
         const provider = new ethers.BrowserProvider(ethereum);
-        const signer = provider.getSigner();
+        const signer = await provider.getSigner();
         const contract = new ethers.Contract(contractAddress, contractAbi, signer);
         const tx = await contract.joinGroup(groupID);
         await tx.wait();
@@ -98,7 +132,7 @@ export const TransactionsProvider = ({ children }) => {
     }
     const closeGroup = async (groupID) => {
         const provider = new ethers.BrowserProvider(ethereum);
-        const signer = provider.getSigner();
+        const signer = await provider.getSigner();
         const contract = new ethers.Contract(contractAddress, contractAbi, signer);
         const tx = await contract.closeGroup(groupID);
         await tx.wait();
@@ -107,7 +141,7 @@ export const TransactionsProvider = ({ children }) => {
     }
     const joingGroupAndPay = async (groupID) => {
         const provider = new ethers.BrowserProvider(ethereum);
-        const signer = provider.getSigner();
+        const signer = await provider.getSigner();
         const contract = new ethers.Contract(contractAddress, contractAbi, signer);
         const tx = await contract.joingGroupAndPay(groupID);
         await tx.wait();
@@ -116,7 +150,7 @@ export const TransactionsProvider = ({ children }) => {
     }
     const claimEscrowedFunds = async (groupID) => {
         const provider = new ethers.BrowserProvider(ethereum);
-        const signer = provider.getSigner();
+        const signer = await provider.getSigner();
         const contract = new ethers.Contract(contractAddress, contractAbi, signer);
         const tx = await contract.claimEscrowedFunds(groupID);
         await tx.wait();
@@ -129,7 +163,10 @@ export const TransactionsProvider = ({ children }) => {
             currentAccount,
             manufacturer,
             product,
+            group,
+            userCategory,
             handleChange,
+            handlePIDChange,
             connectWallet,
             addManufacturer,
             addGroup,
