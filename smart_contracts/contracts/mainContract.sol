@@ -22,6 +22,7 @@ contract mainContract {
     struct manufacturer {
         string manufacturerID;
         string name;
+        string phoneNo;
         string[] productIDs;
         string[] groupIDs;
         uint256 totalRevenue; //total revenue generated for a manufacturer across all closed groups
@@ -39,6 +40,7 @@ contract mainContract {
 
     struct customer {
         string[] groupIDs;
+        string phoneNo;
         bool isValue;
     }
 
@@ -110,7 +112,8 @@ contract mainContract {
 
     function addManufacturer(
         address payable manufacturerAddress,
-        string memory name
+        string memory name,
+        string memory phoneNo
     ) public isOwner {
         lastManufacturerID = lastManufacturerID + 1;
         string memory manufacturerID = uintToString(lastManufacturerID);
@@ -119,6 +122,7 @@ contract mainContract {
             name: name,
             productIDs: new string[](0),
             groupIDs: new string[](0),
+            phoneNo: phoneNo,
             totalRevenue: 0,
             isValue: true
         });
@@ -215,6 +219,10 @@ contract mainContract {
     function getGroupsByManufacturer(
         address manufacturerAddress
     ) public view returns (group[] memory) {
+        require(
+            manufacturerList[manufacturerAddress].isValue,
+            "Manufacturer does not exist"
+        );
         uint length = manufacturerList[manufacturerAddress].groupIDs.length;
         group[] memory groups = new group[](length);
         for (uint i = 0; i < length; i++) {
@@ -246,7 +254,7 @@ contract mainContract {
         return products;
     }
 
-    function registerCustomer() public {
+    function registerCustomer(string memory phoneNo) public {
         require(
             !customerList[msg.sender].isValue,
             "Customer already registered"
@@ -254,6 +262,7 @@ contract mainContract {
 
         customer memory newCustomer = customer({
             groupIDs: new string[](0),
+            phoneNo: phoneNo,
             isValue: true
         });
 
@@ -270,6 +279,21 @@ contract mainContract {
         );
 
         return customerList[customerAddress].groupIDs;
+    }
+
+    function getCustomerInfoByGroup(
+        string memory groupID
+    ) public view isManufacturer returns (customer[] memory) {
+        require(groupList[groupID].isValue, "Group does not exist");
+        customer[] memory customers = new customer[](
+            groupList[groupID].listOfSubscribers.length
+        );
+        for (uint i = 0; i < customers.length; i++) {
+            customers[i] = customerList[
+                groupList[groupID].listOfSubscribers[i]
+            ];
+        }
+        return customers;
     }
 
     //customer joins group and pays for the number of uints they want to subscribe to
