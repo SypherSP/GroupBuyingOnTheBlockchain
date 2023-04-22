@@ -1,6 +1,6 @@
 function CustomerPanel() {
     return (
-        <></>
+        <div></div>
     )
 }
 

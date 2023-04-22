@@ -3,6 +3,7 @@ import Box from "./Box"
 import { TransactionContext } from "../context/TransactionContext"
 import AdminPanel from "./Manufacturer/Admin";
 import ManufacturerPanel from "./Manufacturer/ManufacturerPanel";
+import CustomerPanel from "./Manufacturer/CustomerPanel";
 
 
 function Welcome() {
@@ -14,7 +15,7 @@ function Welcome() {
             {userCategory === "owner" ? <AdminPanel />: ""} 
             {/* {need to remove not registered from above} */}
             {userCategory === "manufacturer"? <ManufacturerPanel />: ""}
-            {userCategory === "customer"? <CustomerPanel />: ""}
+            {userCategory === "customer" || userCategory === "not registered" ? <CustomerPanel />: ""}
             {/* {userCategory === "not registered"? <RegisterPanel />: ""} */}
         </div>
     )
