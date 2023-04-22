@@ -86,7 +86,7 @@ export const TransactionsProvider = ({ children }) => {
         const provider = new ethers.BrowserProvider(ethereum);
         const signer = await provider.getSigner();
         const contract = new ethers.Contract(contractAddress, contractAbi, signer)
-        const tx = await contract.addManufacturer(manufacturer.address, manufacturer.name)
+        const tx = await contract.addManufacturer(manufacturer.address, manufacturer.name, manufacturer.phoneNo)
         await tx.wait();
         console.log("Added");
         return tx.hash;
