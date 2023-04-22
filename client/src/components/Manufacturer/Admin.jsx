@@ -1,9 +1,11 @@
-import { useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import AddManufacturer from './AddManufacturer'
+import { TransactionContext } from '../../context/TransactionContext'
 
 
 function AdminPanel() {
-    const manufacturerList = [{ name: "dev", address: '0xbda224c4Db7D1E88E9B5B89895210CC3B6900fFF' }]
+    const { getAllManufacturers } = useContext(TransactionContext);
+    const [manufacturerList, setManufacturerList] = useState()
     const [manufacturerBoxProperty, setManufacturerBoxProperty] = useState("")
     function add() {
         console.log("add")
@@ -12,6 +14,13 @@ function AdminPanel() {
     function remove() {
         setManufacturerBoxProperty("remove")
     }
+    useEffect(() => {
+        async function fetchData(){
+            let data = await getAllManufacturers();
+            setManufacturerList(data)
+        }
+        fetchData();
+    },[manufacturerBoxProperty])
 
     return (
         <div className="flex justify-center items-center top-10 h-screen w-screen">
@@ -22,16 +31,16 @@ function AdminPanel() {
                         <thead>
                             <tr>
                                 <th className="border border-slate-500 text-left py-1 px-2 ...">Name</th>
-                                <th className="border border-slate-500 text-left py-1 px-2 ...">Address</th>
+                                <th className="border border-slate-500 text-left py-1 px-2 ...">Total Revenue</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {
+                            {manufacturerList &&
                                 manufacturerList.map((manufacturer) => {
                                     return (
-                                        <tr  key={manufacturer.address}>
+                                        <tr  key={manufacturer.manufacturerID}>
                                             <td className="border border-slate-500 text-left px-2 py-1 ..." >{manufacturer.name}</td>
-                                            <td className="border border-slate-500 text-left px-2 py-1 ..." >{manufacturer.address}</td>
+                                            <td className="border border-slate-500 text-left px-2 py-1 ..." >{manufacturer.totalRevenue.toString()}</td>
                                         </tr>
                                 )})
                             }

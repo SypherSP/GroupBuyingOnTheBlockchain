@@ -11,9 +11,9 @@ export const TransactionsProvider = ({ children }) => {
     
     const [currentAccount, setCurrentAccount] = useState("");
     const [manufacturer, setManufacturer] = useState({ "address": '', "name": '' });
-    const [product, setProduct] = useState({ "name": '', "description": '' });
+    const [product, setProduct] = useState({ "name": '', "description": '', retailPrice: 0});
     const [group, setGroup] = useState({pID:"",  maxSubscription: 0, unitValue: 0})
-    const [userCategory, setUserCategory] = useState("manufacturer");
+    const [userCategory, setUserCategory] = useState("");
     const handleChange = (e, changeType) => {
         const { name, value } = e.target
         if(changeType === "manufacturer") setManufacturer((prevData) => ({
@@ -65,11 +65,21 @@ export const TransactionsProvider = ({ children }) => {
         setUserCategory(tx);
     }
 
-    const getAllManufacturer = async () => {
+    const getAllManufacturers = async () => {
         const provider = new ethers.BrowserProvider(ethereum);
-        const contract = new ethers.Contract(contractAddress, contractAbi, provider);
-        // const tx = await contract.getAllManufacturer();
-        // return tx;
+        const signer = await provider.getSigner();
+        const contract = new ethers.Contract(contractAddress, contractAbi, signer);
+        console.log(currentAccount)
+        const tx = await contract.getAllManufacturers();
+        return tx;
+    }
+
+    const getGroupsByManufacturer = async () => {
+        const provider = new ethers.BrowserProvider(ethereum);
+        const signer = await provider.getSigner();
+        const contract = new ethers.Contract(contractAddress, contractAbi, signer);
+        const tx = await contract.getGroupsByManufacturer(currentAccount);
+        return tx;
     }
 
     const addManufacturer = async () => {
@@ -94,8 +104,8 @@ export const TransactionsProvider = ({ children }) => {
         const provider = new ethers.BrowserProvider(ethereum);
         const signer = await provider.getSigner();
         const contract = new ethers.Contract(contractAddress, contractAbi, signer);
-        console.log(signer)
-        const tx = await contract.addProduct(product.name, product.description);
+        console.log(product.name, product.description, "this is product ")
+        const tx = await contract.addProduct(product.name, product.description, product.retailPrice);
         await tx.wait();
         console.log("Added");
         return tx.hash;
@@ -172,7 +182,9 @@ export const TransactionsProvider = ({ children }) => {
             addGroup,
             addProduct,
             getProductsByManufacturer,
+            getGroupsByManufacturer,
             getProductsByCustomer,
+            getAllManufacturers,
             registerCustomer,
             joinGroup,
             closeGroup,

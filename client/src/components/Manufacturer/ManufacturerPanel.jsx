@@ -2,10 +2,11 @@ import { useContext, useEffect, useState } from "react";
 import AddProduct from "../Products/AddProduct"
 import AddListing from "../Products/AddListing"
 import { TransactionContext } from "../../context/TransactionContext";
+import Listings from "../Products/Listings";
 
 function ManufacturerPanel() {
     const { getProductsByManufacturer } = useContext(TransactionContext)
-    const [products, setProducts] = useState([{name:"calculator", pID: "hsdf", mID: "dsf", description: "This is calcultors description", isValue: false}])
+    const [products, setProducts] = useState([{ name: "calculator", pID: "hsdf", mID: "dsf", description: "This is calcultors description", isValue: false }])
     const [property, setIsProperty] = useState("")
     const handleClick = (e) => {
         e.preventDefault();
@@ -27,8 +28,9 @@ function ManufacturerPanel() {
                     <div className="m-3 text-left text-2xl">
                         Our Listings
                     </div>
+                    <Listings />
                     {/* <div className=""> Our Products</div> */}
-                    { 1 === 1? "":
+                    {1 === 1 ? "" :
                         products.map((product) => {
                             return (
                                 <tr key={product.pID}>
@@ -49,8 +51,8 @@ function ManufacturerPanel() {
                 </div>
                 <button className="">Transfer Funds</button>
             </div>
-            {property === "addProduct" ? <AddProduct property={setIsProperty} />: ""}
-            {property === "addListing" ? <AddListing property={setIsProperty}/>: ""}
+            {property === "addProduct" ? <AddProduct property={setIsProperty} /> : ""}
+            {property === "addListing" ? <AddListing property={setIsProperty} /> : ""}
         </div>
     )
 }

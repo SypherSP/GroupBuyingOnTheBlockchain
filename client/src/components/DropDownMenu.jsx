@@ -11,10 +11,11 @@ function DropdownMenu({ selectedItem, setSelectedItem }) {
     useEffect(() => {
         async function fetchData() {
             let data = await getProductsByManufacturer();
+            console.log(data);
             setProducts(data);
         }
         fetchData();
-    })
+    },[])
 
     return (
         <select value={selectedItem} onChange={handleSelect}>

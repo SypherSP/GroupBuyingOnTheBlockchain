@@ -27,6 +27,7 @@ function AddProduct(props) {
             <div className="text-center p-12 flex flex-col box-border h-96 w-1/3 justify-center items-center space-y-3 bg-slate-300">
                 <Input type="text" name="name" placeholder="Product Name" handleChange={handleChange} />
                 <Input type="text" name="description" placeholder="Product Description" handleChange={handleChange} />
+                <Input type="number" name="retailPrice" placeholder="Product Retail Price" handleChange={handleChange} />
                 <button onClick={handleSubmit} type="submit">Add Product</button>
             </div>
         </div>
