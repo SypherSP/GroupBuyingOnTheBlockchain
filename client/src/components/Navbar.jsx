@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { TransactionContext } from '../context/TransactionContext';
 import { shortenAddress } from '../context/utils/shortenAddress';
+import dark_logo from './dark_logo.png';
 
 function Navbar() {
     const { connectWallet, currentAccount } = useContext(TransactionContext);
@@ -23,7 +24,7 @@ function Navbar() {
         <nav className="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 left-0 border-b border-gray-200 dark:border-gray-600">
             <div className='max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4'>
                 <div className='flex items-center'>
-                    {/* <img src='' alt='logo' className="h-8 mr-3" /> */}
+                    <img src={dark_logo} alt='logo' className="h-8 mr-3" />
                     <span className='self-center text-2xl font-semibold whitespace-nowrap dark:text-white '>BulkBlock</span>
                 </div>
                 <div className="flex md:order-2">

@@ -1,5 +1,7 @@
 import React from "react";
 import MetamaskLogo from "./metamask-icon.svg";
+import light_logo from "./light_logo.png";
+
 // import { TransactionContext } from "../context/TransactionContext";
 
 const Hero = () => {
@@ -12,11 +14,11 @@ const Hero = () => {
   return (
     <div className="mt-64 flex justify-evenly items-center ">
       <div className="grid place-items-center">
-        <div>
+        <div className="flex items-end">
+          <img className="h-20 m-1 mr-2" src={light_logo} alt="" />
           <span className="self-center text-7xl font-semibold whitespace-nowrap dark:text-blue-950 ">
             BulkBlock
           </span>
-          <img src="" alt="" />
         </div>
         <div>
           <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-blue-600 ">
@@ -31,8 +33,8 @@ const Hero = () => {
           onClick={() => {}}
         >
           <div className="flex items-center text-lg">
-            <img src={MetamaskLogo} className="h-7 m-1 mr-2" alt="" /> Connect to
-            Metamask
+            <img src={MetamaskLogo} className="h-7 m-1 mr-2" alt="" /> Connect
+            to Metamask
           </div>
         </button>
       </div>
