@@ -193,6 +193,15 @@ contract mainContract {
         return listOfManufacturers;
     }
 
+    function getAllGroups() public view returns (group[] memory){
+        group[] memory listOfGroups = new group[](lastGroupID);
+        for (uint256 i = 0; i < lastGroupID; i++) {
+            string memory groupID = uintToString(i+1);
+            listOfGroups[i] = groupList[groupID];
+        }
+        return listOfGroups;
+    }
+
     //returns all products registered by a manufacturer
     function getProductsByManufacturer(
         address manufacturerAddress
