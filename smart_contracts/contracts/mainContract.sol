@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.0;
 
+import "@openzeppelin/contracts/utils/Strings.sol";
+
 contract mainContract {
     address private owner;
     uint256 lastGroupID = 0;
@@ -85,24 +87,24 @@ contract mainContract {
     }
 
     //utility function to convert int to string
-    function uintToString(uint256 value) private pure returns (string memory) {
-        if (value == 0) {
-            return "0";
-        }
-        uint256 temp = value;
-        uint256 digits;
-        while (temp != 0) {
-            digits++;
-            temp /= 10;
-        }
-        bytes memory buffer = new bytes(digits);
-        while (value != 0) {
-            digits--;
-            buffer[digits] = bytes1(uint8(48 + (value % 10)));
-            value /= 10;
-        }
-        return string(buffer);
-    }
+    // function (uint256 value) private pure returns (string memory) {
+    //     if (value == 0) {
+    //         return "0";
+    //     }
+    //     uint256 temp = value;
+    //     uint256 digits;
+    //     while (temp != 0) {
+    //         digits++;
+    //         temp /= 10;
+    //     }
+    //     bytes memory buffer = new bytes(digits);
+    //     while (value != 0) {
+    //         digits--;
+    //         buffer[digits] = bytes1(uint8(48 + (value % 10)));
+    //         value /= 10;
+    //     }
+    //     return string(buffer);
+    // }
 
     function getUseCategory(address user) public view returns (string memory) {
         if (user == owner) return "owner";
@@ -117,7 +119,7 @@ contract mainContract {
         string memory phoneNo
     ) public isOwner {
         lastManufacturerID = lastManufacturerID + 1;
-        string memory manufacturerID = uintToString(lastManufacturerID);
+        string memory manufacturerID = Strings.toString(lastManufacturerID);
         manufacturer memory newManufacturer = manufacturer({
             manufacturerID: manufacturerID,
             name: name,
@@ -145,7 +147,7 @@ contract mainContract {
         );
 
         lastGroupID = lastGroupID + 1;
-        string memory groupID = uintToString(lastGroupID);
+        string memory groupID = Strings.toString(lastGroupID);
         group memory newGroup = group({
             groupID: groupID,
             pID: pID,
@@ -167,7 +169,7 @@ contract mainContract {
         uint retailPrice
     ) public isManufacturer {
         lastProductID = lastProductID + 1;
-        string memory pID = uintToString(lastProductID);
+        string memory pID = Strings.toString(lastProductID);
         product memory newProduct = product({
             name: name,
             pID: pID,
@@ -198,7 +200,7 @@ contract mainContract {
     function getAllGroups() public view returns (group[] memory) {
         group[] memory listOfGroups = new group[](lastGroupID);
         for (uint256 i = 0; i < lastGroupID; i++) {
-            string memory groupID = uintToString(i + 1);
+            string memory groupID = Strings.toString(i + 1);
             listOfGroups[i] = groupList[groupID];
         }
         return listOfGroups;
@@ -244,26 +246,13 @@ contract mainContract {
         return groups;
     }
 
-    function getAllProductsFromProductID(
+    function getAllProductFromProductID(
         string memory pID
     ) public view returns (product memory) {
         require(productList[pID].isValue, "Product does not exist");
         return productList[pID];
     }
 
-    function getAllCustomersFromGroupID(
-        string memory groupID
-    ) public view returns (customer[] memory) {
-        require(groupList[groupID].isValue, "Group does not exist");
-        uint length = groupList[groupID].listOfSubscribers.length;
-        customer[] memory customers = new customer[](length);
-        for (uint i = 0; i < length; i++) {
-            customers[i] = customerList[
-                groupList[groupID].listOfSubscribers[i]
-            ];
-        }
-        return customers;
-    }
 
     function getManufacturerFromID(
         string memory manufacturerID
@@ -284,25 +273,25 @@ contract mainContract {
     }
 
     //returns all the products a customer has subscribed to
-    function getProductsByCustomer(
-        address customerAddress
-    ) public view isCustomer returns (product[] memory) {
-        require(
-            customerList[customerAddress].isValue,
-            "Customer does not exist"
-        );
+    // function getProductsByCustomer(
+    //     address customerAddress
+    // ) public view isCustomer returns (product[] memory) {
+    //     require(
+    //         customerList[customerAddress].isValue,
+    //         "Customer does not exist"
+    //     );
 
-        uint256 productCount = customerList[customerAddress].groupIDs.length;
-        product[] memory products = new product[](productCount);
+    //     uint256 productCount = customerList[customerAddress].groupIDs.length;
+    //     product[] memory products = new product[](productCount);
 
-        for (uint256 i = 0; i < productCount; i++) {
-            string memory groupID = customerList[customerAddress].groupIDs[i];
-            string memory pID = groupList[groupID].pID;
-            products[i] = productList[pID];
-        }
+    //     for (uint256 i = 0; i < productCount; i++) {
+    //         string memory groupID = customerList[customerAddress].groupIDs[i];
+    //         string memory pID = groupList[groupID].pID;
+    //         products[i] = productList[pID];
+    //     }
 
-        return products;
-    }
+    //     return products;
+    // }
 
     function registerCustomer(string memory phoneNo) public {
         require(
@@ -405,5 +394,5 @@ contract mainContract {
         emit fundTransfer(address(this), msg.sender, escrowedFunds);
     }
 
-    function leaveGroup(string memory groupID) public isCustomer {}
+    // function leaveGroup(string memory groupID) public isCustomer {}
 }
