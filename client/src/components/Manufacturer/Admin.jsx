@@ -6,6 +6,9 @@ function AdminPanel() {
   const { getAllManufacturers } = useContext(TransactionContext);
   const [manufacturerList, setManufacturerList] = useState();
   const [manufacturerBoxProperty, setManufacturerBoxProperty] = useState("");
+  const [showModal, setShowModal] = useState(false);
+
+  const toggleModal = () => setShowModal(!showModal);
   function add() {
     console.log("add");
     setManufacturerBoxProperty("add");
@@ -46,7 +49,7 @@ function AdminPanel() {
               </tr>
             </thead>
             <tbody>
-              {manufacturerList &&
+              {manufacturerList && manufacturerList.length !== 0 &&
                 manufacturerList.map((manufacturer) => {
                   return (
                     <tr
@@ -71,15 +74,13 @@ function AdminPanel() {
         </div>
 
         <div className="flex justify-center">
-          <button onClick={add} className="p-1">
+          <button onClick={toggleModal} data-modal-target="defaultModal" data-modal-toggle="defaultModal" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
             Add
           </button>
+          {showModal && <AddManufacturer property={setManufacturerBoxProperty} toggleModal={toggleModal} showModal={showModal} />}
           <button className="p-1">Delete</button>
         </div>
       </div>
-      {manufacturerBoxProperty === "add" ? (
-        <AddManufacturer property={setManufacturerBoxProperty} />
-      ) : null}
     </div>
   );
 }

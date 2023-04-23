@@ -8,21 +8,21 @@ export const TransactionContext = React.createContext();
 
 
 export const TransactionsProvider = ({ children }) => {
-    
+
     const [currentAccount, setCurrentAccount] = useState("");
     const [manufacturer, setManufacturer] = useState({ "address": '', "name": '' });
-    const [product, setProduct] = useState({ "name": '', "description": '', retailPrice: 0});
-    const [group, setGroup] = useState({pID:"",  maxSubscription: 0, unitValue: 0})
+    const [product, setProduct] = useState({ "name": '', "description": '', retailPrice: 0 });
+    const [group, setGroup] = useState({ pID: "", maxSubscription: 0, unitValue: 0 })
     const [userCategory, setUserCategory] = useState("");
     const handleChange = (e, changeType) => {
         const { name, value } = e.target
-        if(changeType === "manufacturer") setManufacturer((prevData) => ({
-            ...prevData, [name]: value
-        })) 
-        else if(changeType === "product") setProduct((prevData) => ({
+        if (changeType === "manufacturer") setManufacturer((prevData) => ({
             ...prevData, [name]: value
         }))
-        else if(changeType === "group") setGroup((prevData) => ({
+        else if (changeType === "product") setProduct((prevData) => ({
+            ...prevData, [name]: value
+        }))
+        else if (changeType === "group") setGroup((prevData) => ({
             ...prevData, [name]: value
         }))
     }
@@ -41,8 +41,16 @@ export const TransactionsProvider = ({ children }) => {
             console.log(tx)
             setUserCategory(tx);
         }
-        if(currentAccount !== '')getDetails();
-    },[currentAccount])
+        if (currentAccount !== '') getDetails();
+    }, [currentAccount])
+    useEffect(() => {
+        const storedAccount = localStorage.getItem("currentAccount");
+      
+        if (storedAccount) {
+          setCurrentAccount(storedAccount);
+        }
+      }, []);
+      
 
     const connectWallet = async () => {
         try {
@@ -50,6 +58,8 @@ export const TransactionsProvider = ({ children }) => {
 
             const accounts = await ethereum.request({ method: "eth_requestAccounts", });
             setCurrentAccount(accounts[0]);
+            // Store currentAccount in localStorage
+            localStorage.setItem("currentAccount", accounts[0]);
         } catch (error) {
             console.log(error);
 
@@ -59,7 +69,7 @@ export const TransactionsProvider = ({ children }) => {
 
     const getDetails = async () => {
         const provider = new ethers.BrowserProvider(ethereum);
-        const contract = new ethers.Contract(contractAddress,contractAbi,provider);
+        const contract = new ethers.Contract(contractAddress, contractAbi, provider);
         const tx = await contract.getUserCategory(currentAccount);
         await tx.wait()
         setUserCategory(tx);
@@ -124,11 +134,11 @@ export const TransactionsProvider = ({ children }) => {
         const tx = await contract.getProductsByCustomer(customerAddress);
         return tx;
     }
-    const registerCustomer = async () => {
+    const registerCustomer = async (phoneNo) => {
         const provider = new ethers.BrowserProvider(ethereum);
         const signer = await provider.getSigner();
         const contract = new ethers.Contract(contractAddress, contractAbi, signer);
-        const tx = contract.registerCustomer();
+        const tx = contract.registerCustomer(phoneNo);
         return tx.hash;
     }
     const joinGroup = async (groupID) => {
