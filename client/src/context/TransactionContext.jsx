@@ -100,6 +100,14 @@ export const TransactionsProvider = ({ children }) => {
         return tx;
     }
 
+    const getAllProductFromProductID = async (pID) => {
+        const provider = new ethers.BrowserProvider(ethereum);
+        const signer = await provider.getSigner();
+        const contract = new ethers.Contract(contractAddress, contractAbi, signer);
+        const tx = await contract.getAllProductFromProductID(pID);
+        return tx;
+    }
+
     const addManufacturer = async () => {
         const provider = new ethers.BrowserProvider(ethereum);
         const signer = await provider.getSigner();
@@ -146,18 +154,11 @@ export const TransactionsProvider = ({ children }) => {
         const provider = new ethers.BrowserProvider(ethereum);
         const signer = await provider.getSigner();
         const contract = new ethers.Contract(contractAddress, contractAbi, signer);
-        const tx = contract.registerCustomer(phoneNo);
-        return tx.hash;
-    }
-    const joinGroup = async (groupID) => {
-        const provider = new ethers.BrowserProvider(ethereum);
-        const signer = await provider.getSigner();
-        const contract = new ethers.Contract(contractAddress, contractAbi, signer);
-        const tx = await contract.joinGroup(groupID);
+        const tx = await contract.registerCustomer(phoneNo);
         await tx.wait();
-        console.log("Joined");
         return tx.hash;
     }
+
     const closeGroup = async (groupID) => {
         const provider = new ethers.BrowserProvider(ethereum);
         const signer = await provider.getSigner();
@@ -167,11 +168,13 @@ export const TransactionsProvider = ({ children }) => {
         console.log("Closed");
         return tx.hash;
     }
-    const joingGroupAndPay = async (groupID) => {
+    const joinGroupAndPay = async (groupID, units, totalPrice) => {
+        console.log(totalPrice, units)
         const provider = new ethers.BrowserProvider(ethereum);
         const signer = await provider.getSigner();
         const contract = new ethers.Contract(contractAddress, contractAbi, signer);
-        const tx = await contract.joingGroupAndPay(groupID);
+        const paymentAmountWei = ethers.parseUnits(totalPrice.toString(), 18);
+        const tx = await contract.joinGroupAndPay(groupID, units, {value: paymentAmountWei});
         await tx.wait();
         console.log("Joined");
         return tx.hash;
@@ -202,12 +205,12 @@ export const TransactionsProvider = ({ children }) => {
             getProductsByManufacturer,
             getGroupsByManufacturer,
             getProductsByCustomer,
+            getAllProductFromProductID,
             getAllManufacturers,
             getAllGroups,
             registerCustomer,
-            joinGroup,
             closeGroup,
-            joingGroupAndPay,
+            joinGroupAndPay,
             claimEscrowedFunds
         }}>
             {children}

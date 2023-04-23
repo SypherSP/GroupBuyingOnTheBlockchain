@@ -14,9 +14,8 @@ function Welcome() {
     return (
         <div>
             {userCategory === "owner" ? <AdminPanel />: ""}
-            {/* {need to remove not registered from above} */}
             {userCategory === "manufacturer"? <ManufacturerPanel />: ""}
-            {userCategory === "customer" || userCategory === "not registered" ? <MarketListings />: ""}
+            {userCategory === "customer" ? <MarketListings />: ""}
             {userCategory === "not registered" || (currentAccount === "" && userCategory === "") ? <RegisterPanel />: ""}
         </div>
     )

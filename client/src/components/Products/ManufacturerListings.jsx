@@ -2,11 +2,19 @@ import { useState, useContext, useEffect } from "react"
 import { TransactionContext } from "../../context/TransactionContext"
 
 function ManufacturerListings() {
-    const { getGroupsByManufacturer, claimEscrowFunds, closeGroup } = useContext(TransactionContext);
+    const { getGroupsByManufacturer, claimEscrowFunds, closeGroup, getAllProductFromProductID } = useContext(TransactionContext);
     const [listings, setListings] = useState();
+    const [product, setProduct] = useState();
     useEffect(() => {
         async function fetchData() {
             let data = await getGroupsByManufacturer();
+            data.map(async (list) => {
+                let prod = await getAllProductFromProductID(list.pID);
+                setProduct((prevData) => ({
+                    ...prevData,
+                    [list.pID]: prod
+                }))
+            })
             setListings(data);
         }
         fetchData();
@@ -24,7 +32,7 @@ function ManufacturerListings() {
                     <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                         <tr>
                             <th scope="col" className="px-6 py-3">
-                                Product Id
+                                Product Name
                             </th>
                             <th scope="col" className="px-6 py-3">
                                 Accumulated Payment
@@ -38,7 +46,7 @@ function ManufacturerListings() {
                         </tr>
                     </thead>
                     <tbody>
-                        {listings && listings.length !== 0 &&
+                        {(listings && product) && listings.length !== 0 &&
                             listings.map((listing) => {
                                 return (
                                     <tr
@@ -49,7 +57,7 @@ function ManufacturerListings() {
                                             scope="row"
                                             className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                                         >
-                                            {listing.groupID}
+                                            {product[listing.pID].name}
                                         </th>
                                         <td className="px-6 py-4 text-center">
                                             {listing.accumulatedPayment.toString()}
