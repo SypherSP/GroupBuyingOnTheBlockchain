@@ -1,7 +1,7 @@
 import React, { useState } from "react";
+import { getPhotoUrl } from "./pexelsAPI";
 
 function Listing({
-  imageUrl,
   name,
   description,
   retailPrice,
@@ -15,7 +15,10 @@ function Listing({
   const [totalSavings, setTotalSavings] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
 
-  const discount = parseFloat(((retailPrice - price) / retailPrice) * 100).toFixed(1);
+  const imageUrl = getPhotoUrl(name);
+  const discount = parseFloat(
+    ((retailPrice - price) / retailPrice) * 100
+  ).toFixed(1);
 
   const handleQuantityChange = (e) => {
     const newQuantity = parseInt(e.target.value, 10) || 0;
@@ -64,34 +67,34 @@ function Listing({
             </div>
             <div>subscribed</div>
           </div>
-<div className="flex justify-between">
-        <div className="flex content-center">
-          <button
-            onClick={decrementQuantity}
-            className="bg-gray-200 text-gray-700 font-semibold py-1 px-2 rounded-l-md hover:bg-gray-300"
-          >
-            -
-          </button>
-          <input
-            className="w-12 text-center border-t border-b border-gray-200"
-            type="number"
-            id="quantity"
-            name="quantity"
-            min="0"
-            placeholder="0"
-            value={quantity}
-            onChange={handleQuantityChange}
-          />
-          <button
-            onClick={incrementQuantity}
-            className="bg-gray-200 text-gray-700 font-semibold py-1 px-2 rounded-r-md hover:bg-gray-300"
-          >
-            +
-          </button>
-          <div className="text-xl ml-2">${totalPrice.toFixed(2)}</div>
-        </div>
-        <div>total savings: ${totalSavings.toFixed(2)}</div>
-      </div>
+          <div className="flex justify-between">
+            <div className="flex content-center">
+              <button
+                onClick={decrementQuantity}
+                className="bg-gray-200 text-gray-700 font-semibold py-1 px-2 rounded-l-md hover:bg-gray-300"
+              >
+                -
+              </button>
+              <input
+                className="w-12 text-center border-t border-b border-gray-200"
+                type="number"
+                id="quantity"
+                name="quantity"
+                min="0"
+                placeholder="0"
+                value={quantity}
+                onChange={handleQuantityChange}
+              />
+              <button
+                onClick={incrementQuantity}
+                className="bg-gray-200 text-gray-700 font-semibold py-1 px-2 rounded-r-md hover:bg-gray-300"
+              >
+                +
+              </button>
+              <div className="text-xl ml-2">${totalPrice.toFixed(2)}</div>
+            </div>
+            <div>total savings: ${totalSavings.toFixed(2)}</div>
+          </div>
           <div className="mt-2">
             <button
               type="button"
