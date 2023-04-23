@@ -320,23 +320,23 @@ contract mainContract {
         return customerList[customerAddress].groupIDs;
     }
 
-    function getGroupFromID(string memory groupID)
-        public
-        view
-        returns (group memory)
-    {
-        require(groupList[groupID].isValue, "Group does not exist");
-        return groupList[groupID];
-    }
+    // function getGroupFromID(string memory groupID)
+    //     public
+    //     view
+    //     returns (group memory)
+    // {
+    //     require(groupList[groupID].isValue, "Group does not exist");
+    //     return groupList[groupID];
+    // }
 
-    function getProductFromID(string memory pID)
-        public
-        view
-        returns (product memory)
-    {
-        require(productList[pID].isValue, "Product does not exist");
-        return productList[pID];
-    }
+    // function getProductFromID(string memory pID)
+    //     public
+    //     view
+    //     returns (product memory)
+    // {
+    //     require(productList[pID].isValue, "Product does not exist");
+    //     return productList[pID];
+    // }
 
     function getCustomerInfoByGroup(
         string memory groupID
