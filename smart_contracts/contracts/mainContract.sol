@@ -348,7 +348,7 @@ contract mainContract {
             "Group is full"
         );
         uint256 requiredVal = (groupList[groupID].unitValue) * units;
-        require(msg.value == requiredVal, "Incorrect payment amount");
+        require(msg.value >= requiredVal, "Incorrect payment amount");
 
         emit fundTransfer(msg.sender, address(this), msg.value);
 
