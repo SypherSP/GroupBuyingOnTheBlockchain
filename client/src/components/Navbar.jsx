@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { TransactionContext } from '../context/TransactionContext';
 import { shortenAddress } from '../context/utils/shortenAddress';
-import dark_logo from './dark_logo.png';
+import dark_logo from '../assets/dark_logo.png';
 
 function Navbar() {
     const { connectWallet, currentAccount } = useContext(TransactionContext);

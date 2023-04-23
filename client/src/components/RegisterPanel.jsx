@@ -1,6 +1,7 @@
 import { useContext } from "react";
-import MetamaskLogo from "./metamask-icon.svg";
-import light_logo from "./light_logo.png";
+import MetamaskLogo from "../assets/metamask-icon.svg";
+import light_logo from "../assets/light_logo.png";
+import Listing from "./Products/Listing";
 import { TransactionContext } from "../context/TransactionContext";
 
 const RegisterPanel = () => {

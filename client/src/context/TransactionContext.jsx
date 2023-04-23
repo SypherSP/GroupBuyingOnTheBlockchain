@@ -67,12 +67,20 @@ export const TransactionsProvider = ({ children }) => {
         }
     };
 
-    const getDetails = async () => {
+    // const getDetails = async () => {
+    //     const provider = new ethers.BrowserProvider(ethereum);
+    //     const contract = new ethers.Contract(contractAddress, contractAbi, provider);
+    //     const tx = await contract.getUserCategory(currentAccount);
+    //     await tx.wait()
+    //     setUserCategory(tx);
+    // }
+
+    const getAllGroups = async () => {
         const provider = new ethers.BrowserProvider(ethereum);
-        const contract = new ethers.Contract(contractAddress, contractAbi, provider);
-        const tx = await contract.getUserCategory(currentAccount);
-        await tx.wait()
-        setUserCategory(tx);
+        const signer = await provider.getSigner();
+        const contract = new ethers.Contract(contractAddress, contractAbi, signer);
+        const tx = await contract.getAllGroups();
+        return tx;
     }
 
     const getAllManufacturers = async () => {
@@ -195,6 +203,7 @@ export const TransactionsProvider = ({ children }) => {
             getGroupsByManufacturer,
             getProductsByCustomer,
             getAllManufacturers,
+            getAllGroups,
             registerCustomer,
             joinGroup,
             closeGroup,
