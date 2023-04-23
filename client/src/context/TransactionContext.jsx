@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ethers } from 'ethers';
+import Web3 from 'web3';
 import { abi } from '../../../smart_contracts/contractArtifacts';
 const { ethereum } = window;
 const { contractAbi, contractAddress } = abi;
@@ -45,12 +46,12 @@ export const TransactionsProvider = ({ children }) => {
     }, [currentAccount])
     useEffect(() => {
         const storedAccount = sessionStorage.getItem("currentAccount");
-      
+
         if (storedAccount) {
           setCurrentAccount(storedAccount);
         }
       }, []);
-      
+
 
     const connectWallet = async () => {
         try {
@@ -139,6 +140,7 @@ export const TransactionsProvider = ({ children }) => {
         const provider = new ethers.BrowserProvider(ethereum);
         // const signer = await provider.getSigner();
         const contract = new ethers.Contract(contractAddress, contractAbi, provider);
+        console.log("helo", customerAddress);
         const tx = await contract.getProductsByCustomer(customerAddress);
         return tx;
     }
@@ -186,6 +188,25 @@ export const TransactionsProvider = ({ children }) => {
         return tx.hash;
     };
 
+const getCustomerGroups = async (customerAddress) => {
+  const web3 = new Web3(ethereum);
+  const contract = new web3.eth.Contract(contractAbi, contractAddress);
+
+  try {
+    const groupIDs = await contract.methods.getCustomerGroups(customerAddress).call();
+    console.log("Group IDs for customer:", groupIDs);
+
+    // Fetch group structs
+    const groupPromises = groupIDs.map((groupID) => contract.methods.groupList(groupID).call());
+    const groups = await Promise.all(groupPromises);
+    console.log("Group structs for customer:", groups);
+    return groups;
+  } catch (error) {
+    console.error("Error fetching customer groups:", error);
+  }
+};
+
+
     return (
         <TransactionContext.Provider value={{
             currentAccount,
@@ -208,7 +229,8 @@ export const TransactionsProvider = ({ children }) => {
             joinGroup,
             closeGroup,
             joingGroupAndPay,
-            claimEscrowedFunds
+            claimEscrowedFunds,
+            getCustomerGroups
         }}>
             {children}
         </TransactionContext.Provider>
