@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import AddProduct from "../Products/AddProduct"
 import AddListing from "../Products/AddListing"
 import { TransactionContext } from "../../context/TransactionContext";
-import Listings from "../Products/Listings";
+import ManufacturerListings from "../Products/ManufacturerListings";
 
 function ManufacturerPanel() {
     const { getProductsByManufacturer } = useContext(TransactionContext)
@@ -25,27 +25,16 @@ function ManufacturerPanel() {
         <div className="flex flex-row h-screen">
             <div className="w-1/2 bg-slate-500">
                 <div className="mt-[7rem] ml-[5rem]">
-                    <div className="flex flex-row space-x-5">
+                    <div className="flex flex-row space-x-5 m-6">
                         <button onClick={handleClick} className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" name="addProduct">Add Product</button>
                         {showModal==="product" && <AddProduct showModal={showModal} toggleModal={toggleModal} />}
                         <button onClick={handleClick} className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" name="addListing">Add Listing</button>
                         {showModal==="list" && <AddListing showModal={showModal} toggleModal={toggleModal} />}
                     </div>
-                    <div className="m-3 text-left text-2xl">
+                    {/* <div className="m-3 text-left text-2xl">
                         Our Listings
-                    </div>
-                    <Listings />
-                    {/* <div className=""> Our Products</div> */}
-                    {/* {1 === 1 ? "" :
-                        products.map((product) => {
-                            return (
-                                <tr key={product.pID}>
-                                    <td className="border border-slate-500 text-left px-2 py-1 ..." >{product.name}</td>
-                                    <td className="border border-slate-500 text-left px-2 py-1 ..." >{product.address}</td>
-                                </tr>
-                            )
-                        })
-                    } */}
+                    </div> */}
+                    <ManufacturerListings />
                 </div>
             </div>
             <div className="w-1/2 bg-slate-0">
@@ -57,9 +46,7 @@ function ManufacturerPanel() {
                 </div>
                 <button className="">Transfer Funds</button>
             </div>
-            {/* {property === "addProduct" ? <AddProduct property={setIsProperty} /> : ""}
-            {property === "addListing" ? <AddListing property={setIsProperty} /> : ""} */}
-        </div>
+         </div>
     )
 }
 export default ManufacturerPanel;

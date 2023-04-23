@@ -44,7 +44,7 @@ export const TransactionsProvider = ({ children }) => {
         if (currentAccount !== '') getDetails();
     }, [currentAccount])
     useEffect(() => {
-        const storedAccount = localStorage.getItem("currentAccount");
+        const storedAccount = sessionStorage.getItem("currentAccount");
       
         if (storedAccount) {
           setCurrentAccount(storedAccount);
@@ -59,7 +59,7 @@ export const TransactionsProvider = ({ children }) => {
             const accounts = await ethereum.request({ method: "eth_requestAccounts", });
             setCurrentAccount(accounts[0]);
             // Store currentAccount in localStorage
-            localStorage.setItem("currentAccount", accounts[0]);
+            sessionStorage.setItem("currentAccount", accounts[0]);
         } catch (error) {
             console.log(error);
 

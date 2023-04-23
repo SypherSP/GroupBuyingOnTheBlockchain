@@ -1,8 +1,8 @@
 import { useState, useContext, useEffect } from "react"
 import { TransactionContext } from "../../context/TransactionContext"
 
-function Listings() {
-    const { getGroupsByManufacturer } = useContext(TransactionContext);
+function ManufacturerListings() {
+    const { getGroupsByManufacturer, claimEscrowFunds, closeGroup } = useContext(TransactionContext);
     const [listings, setListings] = useState();
     useEffect(() => {
         async function fetchData() {
@@ -13,27 +13,6 @@ function Listings() {
     })
     return (
         <div className="flex justify-center">
-            {/* <table className="table-fixed border-separate border-spacing-2 border p-1 border-slate-500 ...">
-                <thead>
-                    <tr>
-                        <th className="border border-slate-500 text-left py-1 px-2 ...">Product Id</th>
-                        <th className="border border-slate-500 text-left py-1 px-2 ...">Total Revenue</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {listings && listings.length !==0 &&
-                        listings.map((listing) => {
-                            return (
-                                <tr key={listing.pID}>
-                                    <td className="border border-slate-500 text-center px-2 py-1 ..." >{listing.pID}</td>
-                                    <td className="border border-slate-500 text-center px-2 py-1 ..." >{listing.accumulatedPayment.toString()}</td>
-                                    <td><button className={listing.isOpen ?  "disabled:opacity-75": ""}>Close</button></td>
-                                </tr>
-                            )
-                        })
-                    }
-                </tbody>
-            </table> */}
             <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
                 <table className="w-full text-sm text-left text-gray-500">
                     <caption className="p-5 text-2xl font-semibold text-left text-gray-900 bg-white">
@@ -63,23 +42,23 @@ function Listings() {
                             listings.map((listing) => {
                                 return (
                                     <tr
-                                        key={listing.pID}
+                                        key={listing.groupID}
                                         className="bg-white border-b"
                                     >
                                         <th
                                             scope="row"
                                             className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                                         >
-                                            {listing.pID}
+                                            {listing.groupID}
                                         </th>
-                                        <td className="px-6 py-4">
+                                        <td className="px-6 py-4 text-center">
                                             {listing.accumulatedPayment.toString()}
                                         </td>
                                         <td className="px-6 py-4">
-                                            <button className="" disabled={!listing.isOpen}></button>
+                                            <button onClick={() => closeGroup(listing.groupID)} className={"text-red-700  border border-red-700  focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-red-500 dark:text-red-500 dark:focus:ring-red-900" + ((!listing.isOpen) ? "cursor-not-allowed opacity-75" : "hover:text-white dark:hover:text-white hover:bg-red-800 dark:hover:bg-red-600 ")} disabled={!listing.isOpen}>Close</button>
                                         </td>
                                         <td className="px-6 py-4">
-                                            <button className="" disabled={listing.isOpen}></button>
+                                            <button onClick={() => claimEscrowFunds(listing.groupID)} className={"text-green-700 border border-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-green-500 dark:text-green-500 dark:focus:ring-green-800" + ((!listing.isOpen || !listing.isValue) ? "cursor-not-allowed opacity-75 " : "hover:text-white dark:hover:text-white hover:bg-green-800 dark:hover:bg-green-600")} disabled={!(listing.isOpen && listing.isValue)}>Withdraw</button>
                                         </td>
                                     </tr>
                                 );
@@ -87,8 +66,8 @@ function Listings() {
                     </tbody>
                 </table>
             </div>
-        </div>
+        </div >
     )
 }
 
-export default Listings
+export default ManufacturerListings;
