@@ -50,7 +50,7 @@ contract mainContract {
     mapping(string => product) productList; //list of all
     mapping(address => manufacturer) manufacturerList; //list of all manufacturers
     address[] manufacturerAddresses;
-    mapping(string => group) groupList; //list of all groups
+    mapping(string => group) public groupList; //list of all groups
     mapping(address => customer) customerList; //list of all customers
     mapping(string => mapping(address => uint256)) paymentRecords; //mapping (groupID, customer address) to number of uints subscribed in that group
 
@@ -318,6 +318,24 @@ contract mainContract {
         );
 
         return customerList[customerAddress].groupIDs;
+    }
+
+    function getGroupFromID(string memory groupID)
+        public
+        view
+        returns (group memory)
+    {
+        require(groupList[groupID].isValue, "Group does not exist");
+        return groupList[groupID];
+    }
+
+    function getProductFromID(string memory pID)
+        public
+        view
+        returns (product memory)
+    {
+        require(productList[pID].isValue, "Product does not exist");
+        return productList[pID];
     }
 
     function getCustomerInfoByGroup(
