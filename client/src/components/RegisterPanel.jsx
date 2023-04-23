@@ -1,7 +1,6 @@
 import { useContext } from "react";
 import MetamaskLogo from "./metamask-icon.svg";
 import light_logo from "./light_logo.png";
-import Listing from "./Products/Listing";
 import { TransactionContext } from "../context/TransactionContext";
 
 const RegisterPanel = () => {
@@ -11,7 +10,7 @@ const RegisterPanel = () => {
     e.preventDefault();
     if (currentAccount === null || currentAccount === "" || currentAccount === undefined) await connectWallet();
     console.log("registering")
-    await registerCustomer(7428437578);
+    await registerCustomer(123456789);
     window.location.reload()
   }
   return (

@@ -195,10 +195,10 @@ contract mainContract {
         return listOfManufacturers;
     }
 
-    function getAllGroups() public view returns (group[] memory){
+    function getAllGroups() public view returns (group[] memory) {
         group[] memory listOfGroups = new group[](lastGroupID);
         for (uint256 i = 0; i < lastGroupID; i++) {
-            string memory groupID = uintToString(i+1);
+            string memory groupID = uintToString(i + 1);
             listOfGroups[i] = groupList[groupID];
         }
         return listOfGroups;
@@ -242,6 +242,45 @@ contract mainContract {
             ];
         }
         return groups;
+    }
+
+    function getAllProductsFromProductID(
+        string memory pID
+    ) public view returns (product memory) {
+        require(productList[pID].isValue, "Product does not exist");
+        return productList[pID];
+    }
+
+    function getAllCustomersFromGroupID(
+        string memory groupID
+    ) public view returns (customer[] memory) {
+        require(groupList[groupID].isValue, "Group does not exist");
+        uint length = groupList[groupID].listOfSubscribers.length;
+        customer[] memory customers = new customer[](length);
+        for (uint i = 0; i < length; i++) {
+            customers[i] = customerList[
+                groupList[groupID].listOfSubscribers[i]
+            ];
+        }
+        return customers;
+    }
+
+    function getManufacturerFromID(
+        string memory manufacturerID
+    ) public view returns (manufacturer memory m) {
+        for (uint i = 0; i < manufacturerAddresses.length; i++) {
+            if (
+                keccak256(
+                    abi.encodePacked(
+                        manufacturerList[manufacturerAddresses[i]]
+                            .manufacturerID
+                    )
+                ) == keccak256(abi.encodePacked(manufacturerID))
+            ) {
+                m = manufacturerList[manufacturerAddresses[i]];
+                break;
+            }
+        }
     }
 
     //returns all the products a customer has subscribed to
