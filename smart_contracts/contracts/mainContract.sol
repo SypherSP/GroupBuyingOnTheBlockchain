@@ -9,6 +9,7 @@ contract mainContract {
     uint256 lastCustomerID = 0;
 
     struct group {
+        string groupID;
         string pID; //product ID
         address[] listOfSubscribers; //list of customers subscribed to the group
         uint maxSubscription; //max subscription possible
@@ -146,6 +147,7 @@ contract mainContract {
         lastGroupID = lastGroupID + 1;
         string memory groupID = uintToString(lastGroupID);
         group memory newGroup = group({
+            groupID: groupID,
             pID: pID,
             listOfSubscribers: new address[](0),
             maxSubscription: maxSubscription,
