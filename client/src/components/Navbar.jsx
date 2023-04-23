@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { TransactionContext } from '../context/TransactionContext';
 import { shortenAddress } from '../context/utils/shortenAddress';
 import dark_logo from '../assets/dark_logo.png';
@@ -24,8 +25,12 @@ function Navbar() {
         <nav className="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 left-0 border-b border-gray-200 dark:border-gray-600">
             <div className='max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4'>
                 <div className='flex items-center'>
-                    <img src={dark_logo} alt='logo' className="h-8 mr-3" />
-                    <span className='self-center text-2xl font-semibold whitespace-nowrap dark:text-white '>BulkBlock</span>
+                    <Link to="/">
+                        <img src={dark_logo} alt='logo' className="h-8 mr-3" />
+                    </Link>
+                    <Link to="/">
+                        <span className='self-center text-2xl font-semibold whitespace-nowrap dark:text-white '>BulkBlock</span>
+                    </Link>
                 </div>
                 <div className="flex md:order-2">
                     <button type="button" data-collapse-toggle="navbar-search" aria-controls="navbar-search" aria-expanded="false" className="md:hidden text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5 mr-1" >
@@ -53,7 +58,9 @@ function Navbar() {
                 </div>
                 <div className='items-center justify-between hidden w-full md:flex md:w-auto md:order-1' id="navbar-sticky">
                     <ul className='flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700'>
-                        <li className='block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500'>Market</li>
+                        <li className='block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500'>
+                            <Link to="/market">Market</Link>
+                        </li>
                         {/* <li className='block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500'>About Us</li> */}
                         <li className='block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500'>Account</li>
                     </ul>
