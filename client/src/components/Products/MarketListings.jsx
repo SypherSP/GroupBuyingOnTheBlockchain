@@ -8,7 +8,7 @@ function MarketListings() {
   useEffect(() => {
     async function fetchData() {
       let data = await getAllGroups();
-      setListings(listings);
+      setListings(data);
     }
     fetchData();
   })
@@ -24,20 +24,22 @@ function MarketListings() {
     //   maxSubscription={200}
     //   onSubscribe={() => console.log("Subscribed!")}
     // />
-    <div>
-      {listings && listings.length > 0 && listings.map((listing) => {
-        <Listing 
-          key={listing.groupID}
-          imageUrl={undefined}
+    <div className="mt-16 flex flex-wrap justify-center gap-x-6 gap-y-6">
+      {listings.map((listing) => (
+        <div className="mt-4">
+        <Listing
+          // key={listing.groupID}
+          imageUrl="https://casiofanmag.com/wp-content/uploads/2022/04/ga-2100-utility-black-collection-7-1200x1198.jpg"
           name={listing.pID}
           description={listing.pID}
           retailPrice={listing.pID}
-          price={listing.unitValue}
+          price={Number(listing.unitValue)}
           contact={undefined}
           currentSubscription={listing.currentSubscription}
           maxSubscription={listing.maxSubscription}
         />
-      })}
+        </div>
+      ))}
     </div>
   );
 }
