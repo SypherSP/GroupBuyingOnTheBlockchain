@@ -1,16 +1,16 @@
 import { useContext } from "react";
 import { TransactionContext } from "../../context/TransactionContext";
 
-const Input = ({ placeholder, name, type, value, handleChange }) => (
-  <input
-    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-    placeholder={placeholder}
-    type={type}
-    name={name}
-    value={value}
-    onChange={(e) => handleChange(e, "manufacturer")}
-  />
-);
+// const Input = ({ placeholder, name, type, value, handleChange }) => (
+//   <input
+//     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+//     placeholder={placeholder}
+//     type={type}
+//     name={name}
+//     value={value}
+//     onChange={(e) => handleChange(e, "manufacturer")}
+//   />
+// );
 
 function AddManufacturer({ showModal, toggleModal }) {
   const { addManufacturer, manufacturer, handleChange } =
@@ -21,6 +21,7 @@ function AddManufacturer({ showModal, toggleModal }) {
     e.preventDefault();
     if (!address || !name || !phoneNo) return;
     await addManufacturer();
+    toggleModal();
   };
 
   return (
@@ -31,7 +32,7 @@ function AddManufacturer({ showModal, toggleModal }) {
       tabIndex="-1"
       aria-hidden={!showModal}
     >
-      <div className="relative w-full max-w-2xl max-h-full">
+      <div className="relative left-1/3 top-1/3 w-full max-w-2xl max-h-full">
         {/* <!-- Modal content --> */}
         <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
           {/* <!-- Modal header --> */}
@@ -47,16 +48,16 @@ function AddManufacturer({ showModal, toggleModal }) {
           <form className="p-3">
             <div className="grid gap-6 mb-6 md:grid-cols-2">
               <div>
-                <label for="first_name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Manufacturer name</label>
+                <label htmlFor="first_name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Manufacturer name</label>
                 <input type="text" id="manufacturer_name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="John" onChange={(e) => handleChange(e, "manufacturer")} name="name" value={manufacturer.name} required />
               </div>
               <div>
-                <label for="phone" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Phone number</label>
+                <label htmlFor="phone" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Phone number</label>
                 <input type="tel" id="phone" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="123-45-678" onChange={(e) => handleChange(e, "manufacturer")} name="phoneNo" value={manufacturer.phoneNo} pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" required />
               </div>
             </div>
             <div className="mb-6">
-              <label for="wallet_address" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Wallet Address</label>
+              <label htmlFor="wallet_address" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Wallet Address</label>
               <input type="text" id="wallet_address" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0xab...89" onChange={(e) => handleChange(e, "manufacturer")} name="address" value={manufacturer.address} required />
             </div>
             <div className="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
