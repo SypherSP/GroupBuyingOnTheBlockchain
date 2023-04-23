@@ -18,14 +18,11 @@ function DropdownMenu({ selectedItem, setSelectedItem }) {
     },[])
 
     return (
-        <select value={selectedItem} onChange={handleSelect}>
+        <select className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value={selectedItem} onChange={handleSelect}>
             <option value="">-- Select an item --</option>
             {products && products.map((product) => (
                 <option key={product.pID} value={product.pID}>
-                    <div>
-                        <span>{product.name}</span>
-                        <span>{product.description}</span>
-                    </div>
+                    {product.name}
                 </option>
             ))}
         </select>

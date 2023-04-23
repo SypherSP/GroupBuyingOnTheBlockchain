@@ -1,4 +1,4 @@
-import { useState,useContext, useEffect } from "react"
+import { useState, useContext, useEffect } from "react"
 import { TransactionContext } from "../../context/TransactionContext"
 
 function Listings() {
@@ -13,7 +13,7 @@ function Listings() {
     })
     return (
         <div className="flex justify-center">
-            <table className="table-fixed border-separate border-spacing-2 border p-1 border-slate-500 ...">
+            {/* <table className="table-fixed border-separate border-spacing-2 border p-1 border-slate-500 ...">
                 <thead>
                     <tr>
                         <th className="border border-slate-500 text-left py-1 px-2 ...">Product Id</th>
@@ -21,7 +21,7 @@ function Listings() {
                     </tr>
                 </thead>
                 <tbody>
-                    {listings &&
+                    {listings && listings.length !==0 &&
                         listings.map((listing) => {
                             return (
                                 <tr key={listing.pID}>
@@ -33,7 +33,60 @@ function Listings() {
                         })
                     }
                 </tbody>
-            </table>
+            </table> */}
+            <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+                <table className="w-full text-sm text-left text-gray-500">
+                    <caption className="p-5 text-2xl font-semibold text-left text-gray-900 bg-white">
+                        Listings
+                        <p className="mt-1 text-sm font-normal text-gray-500 ">
+                            All listings by you.
+                        </p>
+                    </caption>
+                    <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+                        <tr>
+                            <th scope="col" className="px-6 py-3">
+                                Product Id
+                            </th>
+                            <th scope="col" className="px-6 py-3">
+                                Accumulated Payment
+                            </th>
+                            <th scope="col" className="px-6 py-3">
+                                Status
+                            </th>
+                            <th scope="col" className="px-6 py-3">
+                                Withdrawal
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {listings && listings.length !== 0 &&
+                            listings.map((listing) => {
+                                return (
+                                    <tr
+                                        key={listing.pID}
+                                        className="bg-white border-b"
+                                    >
+                                        <th
+                                            scope="row"
+                                            className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                                        >
+                                            {listing.pID}
+                                        </th>
+                                        <td className="px-6 py-4">
+                                            {listing.accumulatedPayment.toString()}
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            <button className="" disabled={!listing.isOpen}></button>
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            <button className="" disabled={listing.isOpen}></button>
+                                        </td>
+                                    </tr>
+                                );
+                            })}
+                    </tbody>
+                </table>
+            </div>
         </div>
     )
 }

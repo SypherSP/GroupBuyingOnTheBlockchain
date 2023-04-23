@@ -7,11 +7,15 @@ import Listings from "../Products/Listings";
 function ManufacturerPanel() {
     const { getProductsByManufacturer } = useContext(TransactionContext)
     const [products, setProducts] = useState([{ name: "calculator", pID: "hsdf", mID: "dsf", description: "This is calcultors description", isValue: false }])
-    const [property, setIsProperty] = useState("")
+    // const [property, setIsProperty] = useState("")
+    const [showModal, setShowModal] = useState("");
+    const toggleModal = (param) => setShowModal(param);
     const handleClick = (e) => {
         e.preventDefault();
         const { name } = e.target;
-        setIsProperty(name);
+        // setIsProperty(name);
+        if(name==="addProduct") toggleModal("product")
+        else if(name==="addListing") toggleModal("list")
     }
     useEffect(() => {
         let data = getProductsByManufacturer();
@@ -22,15 +26,17 @@ function ManufacturerPanel() {
             <div className="w-1/2 bg-slate-500">
                 <div className="mt-[7rem] ml-[5rem]">
                     <div className="flex flex-row space-x-5">
-                        <button onClick={handleClick} className="border rounded-lg p-2 m-3" name="addProduct">Add Product</button>
-                        <button onClick={handleClick} className="border rounded-lg p-2 m-3" name="addListing">Add Listing</button>
+                        <button onClick={handleClick} className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" name="addProduct">Add Product</button>
+                        {showModal==="product" && <AddProduct showModal={showModal} toggleModal={toggleModal} />}
+                        <button onClick={handleClick} className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" name="addListing">Add Listing</button>
+                        {showModal==="list" && <AddListing showModal={showModal} toggleModal={toggleModal} />}
                     </div>
                     <div className="m-3 text-left text-2xl">
                         Our Listings
                     </div>
                     <Listings />
                     {/* <div className=""> Our Products</div> */}
-                    {1 === 1 ? "" :
+                    {/* {1 === 1 ? "" :
                         products.map((product) => {
                             return (
                                 <tr key={product.pID}>
@@ -39,7 +45,7 @@ function ManufacturerPanel() {
                                 </tr>
                             )
                         })
-                    }
+                    } */}
                 </div>
             </div>
             <div className="w-1/2 bg-slate-0">
@@ -51,8 +57,8 @@ function ManufacturerPanel() {
                 </div>
                 <button className="">Transfer Funds</button>
             </div>
-            {property === "addProduct" ? <AddProduct property={setIsProperty} /> : ""}
-            {property === "addListing" ? <AddListing property={setIsProperty} /> : ""}
+            {/* {property === "addProduct" ? <AddProduct property={setIsProperty} /> : ""}
+            {property === "addListing" ? <AddListing property={setIsProperty} /> : ""} */}
         </div>
     )
 }
