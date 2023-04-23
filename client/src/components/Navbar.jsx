@@ -5,7 +5,7 @@ import { shortenAddress } from "../context/utils/shortenAddress";
 import dark_logo from "../assets/dark_logo.png";
 
 function Navbar() {
-  const { connectWallet, currentAccount } = useContext(TransactionContext);
+  const { connectWallet, currentAccount, userCategory } = useContext(TransactionContext);
   const [walletStatus, setWalletStatus] = useState("Connect Wallet");
 
   const handleClick = (e) => {
@@ -145,7 +145,7 @@ function Navbar() {
             </li>
             {/* <li className='block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500'>About Us</li> */}
             <li className="block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500">
-              <Link to={currentAccount === "owner" ? "/" : "/account"}>
+              <Link to={userCategory === "owner" || userCategory === "manufacturer" ? "/" : "/account"}>
                 Account
               </Link>
             </li>

@@ -45,9 +45,6 @@ return (
                 Unit Value
               </th>
               <th scope="col" className="px-6 py-3">
-                Accumulated Payment
-              </th>
-              <th scope="col" className="px-6 py-3">
                 Open
               </th>
             </tr>
@@ -67,7 +64,6 @@ return (
                   <td className="px-6 py-4">{group.maxSubscription}</td>
                   <td className="px-6 py-4">{group.currentSubscription}</td>
                   <td className="px-6 py-4">{group.unitValue}</td>
-                  <td className="px-6 py-4">{group.accumulatedPayment}</td>
                   <td className="px-6 py-4">{group.isOpen ? 'Yes' : 'No'}</td>
                 </tr>
               ))

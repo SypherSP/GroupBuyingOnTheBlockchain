@@ -48,7 +48,7 @@ function ManufacturerProducts() {
                     </th>
                     <td className="px-6 py-4">{product.description}</td>
                     <td className="px-6 py-4">
-                      {product.retailValue.toString()}
+                      {product.retailPrice.toString()}
                     </td>
                   </tr>
                 );
