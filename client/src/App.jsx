@@ -4,10 +4,12 @@ import MarketListings from './components/Products/MarketListings';
 import Account from './components/Customer/Account';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
+import './App.css';
+
 function App() {
   return (
     <Router>
-      <div className="App">
+      <div className="App bg">
         <Navbar />
         <Routes>
           <Route path="/" element={<Welcome />} />

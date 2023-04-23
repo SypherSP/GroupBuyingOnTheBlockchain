@@ -34,34 +34,34 @@ function ManufacturerPanel() {
     <>
       <div className="flex flex-col h-screen items-center">
 
-        <div class="mt-[6rem] max-w-[80rem] p-4 text-center bg-white border border-gray-200 rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700">
-          <h5 class="mb-2 text-3xl font-bold text-gray-900 dark:text-white">
+        <div className="mt-[6rem] max-w-[80rem] p-4 text-center bg-white border border-gray-200 rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700">
+          <h5 className="mb-2 text-3xl font-bold text-gray-900 dark:text-white">
             Account Summary
           </h5>
-          <p class="mb-5 text-base text-gray-500 sm:text-lg dark:text-gray-400">
+          <p className="mb-5 text-base text-gray-500 sm:text-lg dark:text-gray-400">
             Key statistics about your account
           </p>
-          <div class="items-center justify-center space-y-4 sm:flex sm:space-y-0 sm:space-x-4">
+          <div className="items-center justify-center space-y-4 sm:flex sm:space-y-0 sm:space-x-4">
             <div
               
-              class="w-full sm:w-auto bg-gray-800 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-300 text-white rounded-lg inline-flex items-center justify-center px-4 py-2.5 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700"
+              className="w-full sm:w-auto bg-gray-200 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-700 text-black rounded-lg inline-flex items-center justify-center px-4 py-2.5 dark:text-white dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700"
             >
               
-              <div class="text-center">
-                <div class="mb-1 text-base">Revenue Generated</div>
-                <div class="-mt-1 font-sans text-lg font-semibold">
+              <div className="text-center">
+                <div className="mb-1 text-base">Revenue Generated</div>
+                <div className="-mt-1 font-sans text-lg font-semibold">
                   0$
                 </div>
               </div>
             </div>
             <div
               
-              class="w-full sm:w-auto bg-gray-800 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-300 text-white rounded-lg inline-flex items-center justify-center px-4 py-2.5 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700"
+              className="w-full sm:w-auto bg-gray-200 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-700 text-black rounded-lg inline-flex items-center justify-center px-4 py-2.5 dark:text-white dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700"
             >
               
-              <div class="text-center">
-                <div class="mb-1 text-base">Total Earnings</div>
-                <div class="-mt-1 font-sans text-lg font-semibold">
+              <div className="text-center">
+                <div className="mb-1 text-base">Total Earnings</div>
+                <div className="-mt-1 font-sans text-lg font-semibold">
                   0$
                 </div>
               </div>
@@ -69,12 +69,12 @@ function ManufacturerPanel() {
             
             <div
               
-              class="w-full sm:w-auto bg-gray-800 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-300 text-white rounded-lg inline-flex items-center justify-center px-4 py-2.5 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700"
+              className="w-full sm:w-auto bg-gray-200 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-700 text-black rounded-lg inline-flex items-center justify-center px-4 py-2.5 dark:text-white dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700"
             >
               
-              <div class="text-center">
-                <div class="mb-1 text-base">Completed Listings</div>
-                <div class="-mt-1 font-sans text-lg font-semibold">
+              <div className="text-center">
+                <div className="mb-1 text-base">Completed Listings</div>
+                <div className="-mt-1 font-sans text-lg font-semibold">
                   0$
                 </div>
               </div>
@@ -82,12 +82,12 @@ function ManufacturerPanel() {
 
             <div
               
-              class="w-full sm:w-auto bg-gray-800 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-300 text-white rounded-lg inline-flex items-center justify-center px-4 py-2.5 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700"
+              className="w-full sm:w-auto bg-gray-200 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-700 text-black rounded-lg inline-flex items-center justify-center px-4 py-2.5 dark:text-white dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700"
             >
               
-              <div class="text-center">
-                <div class="mb-1 text-base">Customers Served</div>
-                <div class="-mt-1 font-sans text-lg font-semibold">
+              <div className="text-center">
+                <div className="mb-1 text-base">Customers Served</div>
+                <div className="-mt-1 font-sans text-lg font-semibold">
                   0
                 </div>
               </div>
@@ -95,12 +95,12 @@ function ManufacturerPanel() {
 
             <div
               
-              class="w-full sm:w-auto bg-gray-800 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-300 text-white rounded-lg inline-flex items-center justify-center px-4 py-2.5 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700"
+              className="w-full sm:w-auto bg-gray-200 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-700 text-black rounded-lg inline-flex items-center justify-center px-4 py-2.5 dark:text-white dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700"
             >
               
-              <div class="text-center">
-                <div class="mb-1 text-base">Items Delivered</div>
-                <div class="-mt-1 font-sans text-lg font-semibold">
+              <div className="text-center">
+                <div className="mb-1 text-base">Items Delivered</div>
+                <div className="-mt-1 font-sans text-lg font-semibold">
                   0
                 </div>
               </div>
