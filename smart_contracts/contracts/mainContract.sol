@@ -52,7 +52,7 @@ contract mainContract {
     address[] manufacturerAddresses;
     mapping(string => group) public groupList; //list of all groups
     mapping(address => customer) customerList; //list of all customers
-    mapping(string => mapping(address => uint256)) paymentRecords; //mapping (groupID, customer address) to number of uints subscribed in that group
+    mapping(string => mapping(address => uint256)) public paymentRecords; //mapping (groupID, customer address) to number of uints subscribed in that group
 
     event setOwner(address OldOwner, address Owner);
     event fundTransfer(address from, address to, uint amount);
@@ -371,7 +371,7 @@ contract mainContract {
         emit fundTransfer(msg.sender, address(this), msg.value);
 
         groupList[groupID].listOfSubscribers.push(msg.sender);
-        groupList[groupID].currentSubscription++;
+        groupList[groupID].currentSubscription+=units;
         customerList[msg.sender].groupIDs.push(groupID);
         paymentRecords[groupID][msg.sender] = units;
         groupList[groupID].accumulatedPayment += msg.value;

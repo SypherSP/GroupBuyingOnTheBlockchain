@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useContext } from "react";
 import MetamaskLogo from "../assets/metamask-icon.svg";
 import light_logo from "../assets/light_logo.png";
+import dark_logo from "../assets/dark_logo.png";
 import Listing from "./Products/Listing";
 import { TransactionContext } from "../context/TransactionContext";
 
@@ -74,10 +75,10 @@ const RegisterPanel = () => {
   }
   return (
     <>
-      <div className="mt-64 flex justify-evenly items-center ">
-        <div className="grid place-items-center">
+      <div className="flex justify-evenly items-center ">
+        <div className="mt-64 grid place-items-center">
           <div className="flex items-end">
-            <img className="h-20 m-1 mr-2" src={light_logo} alt="" />
+            <img className="h-20 m-1 mr-2" src={light_logo} dark:src={dark_logo} alt="" />
             <span className="self-center text-7xl font-semibold whitespace-nowrap dark:text-blue-950 ">
               BulkBlock
             </span>

@@ -1,7 +1,12 @@
 export const abi = 
 {
-    contractAddress: "0x5c5062C833B5D5b9BB4FB75117F5a5265BD473D0",
+    contractAddress: "0x9f02107812737530Ea69E68Cf4F2C666AfFcA48b",
     contractAbi: [
+        {
+            "inputs": [],
+            "stateMutability": "nonpayable",
+            "type": "constructor"
+        },
         {
             "anonymous": false,
             "inputs": [
@@ -64,6 +69,10 @@ export const abi =
             ],
             "name": "setOwner",
             "type": "event"
+        },
+        {
+            "stateMutability": "payable",
+            "type": "fallback"
         },
         {
             "inputs": [
@@ -159,50 +168,6 @@ export const abi =
             "outputs": [],
             "stateMutability": "nonpayable",
             "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "string",
-                    "name": "groupID",
-                    "type": "string"
-                },
-                {
-                    "internalType": "uint256",
-                    "name": "units",
-                    "type": "uint256"
-                }
-            ],
-            "name": "joinGroupAndPay",
-            "outputs": [],
-            "stateMutability": "payable",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "string",
-                    "name": "phoneNo",
-                    "type": "string"
-                }
-            ],
-            "name": "registerCustomer",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "stateMutability": "payable",
-            "type": "receive"
-        },
-        {
-            "stateMutability": "payable",
-            "type": "fallback"
-        },
-        {
-            "inputs": [],
-            "stateMutability": "nonpayable",
-            "type": "constructor"
         },
         {
             "inputs": [],
@@ -665,6 +630,65 @@ export const abi =
             ],
             "stateMutability": "view",
             "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "string",
+                    "name": "groupID",
+                    "type": "string"
+                },
+                {
+                    "internalType": "uint256",
+                    "name": "units",
+                    "type": "uint256"
+                }
+            ],
+            "name": "joinGroupAndPay",
+            "outputs": [],
+            "stateMutability": "payable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "string",
+                    "name": "",
+                    "type": "string"
+                },
+                {
+                    "internalType": "address",
+                    "name": "",
+                    "type": "address"
+                }
+            ],
+            "name": "paymentRecords",
+            "outputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "string",
+                    "name": "phoneNo",
+                    "type": "string"
+                }
+            ],
+            "name": "registerCustomer",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "stateMutability": "payable",
+            "type": "receive"
         }
     ]
 }

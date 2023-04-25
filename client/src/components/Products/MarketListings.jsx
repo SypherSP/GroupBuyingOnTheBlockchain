@@ -21,7 +21,7 @@ function MarketListings() {
     fetchData();
   }, [product])
    
-  const handleSubscribe = async (groupID, units, totalPrice) => {
+  const handleSubscribe = async (totalPrice, units, groupID) => {
     console.log('handling subscribe')
     await joinGroupAndPay(groupID, units, totalPrice);
   }
@@ -51,7 +51,7 @@ function MarketListings() {
           groupID={listing.groupID}
           currentSubscription={listing.currentSubscription}
           maxSubscription={listing.maxSubscription}
-          onSubscribe={(units, totalPrice) => handleSubscribe(listing.groupID,units,totalPrice)}
+          onSubscribe={(totalPrice, units) => handleSubscribe(totalPrice,units,listing.groupID)}
         />
         </div>
       ))}
