@@ -31,7 +31,7 @@ const PhoneNoModal = ({ modalStatus, setModalStatus, phoneNo, handleChange, regi
           <form className="p-3">
             <div>
             <label htmlFor="phoneNumber" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Phone Number</label>
-                                <input type="tel" id="phoneNumber" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="123-456-789" onChange={(e) => handleChange(e)} name="number" value={phoneNo} required />
+                                <input type="tel" id="phoneNumber" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Product Name" onChange={(e) => handleChange(e)} name="number" value={phoneNo} required />
                             
             </div>
           </form>
@@ -55,7 +55,7 @@ const RegisterPanel = () => {
     const {name, value} = e.target;
     setPhoneNo(value)
   }
-  
+
   const handleClick = async (e) => {
     e.preventDefault();
     if (currentAccount === null || currentAccount === "" || currentAccount === undefined) await connectWallet();
@@ -64,7 +64,7 @@ const RegisterPanel = () => {
     // setModalStatus(false);
     // window.location.reload()
   }
-  
+
   const register = async () => {
     if (phoneNo === undefined || phoneNo === null || phoneNo === "") return;
     console.log(phoneNo)
