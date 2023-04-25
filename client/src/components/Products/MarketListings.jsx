@@ -42,7 +42,7 @@ function MarketListings() {
         <div className="mt-4">
         <Listing
           key={listing.groupID}
-          imageUrl="https://casiofanmag.com/wp-content/uploads/2022/04/ga-2100-utility-black-collection-7-1200x1198.jpg"
+          // imageUrl="https://casiofanmag.com/wp-content/uploads/2022/04/ga-2100-utility-black-collection-7-1200x1198.jpg"
           name={product[listing.pID].name}
           description={product[listing.pID].description}
           retailPrice={Number(product[listing.pID].retailPrice.toString())}

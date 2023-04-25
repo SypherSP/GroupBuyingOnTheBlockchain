@@ -48,9 +48,9 @@ export const TransactionsProvider = ({ children }) => {
         const storedAccount = sessionStorage.getItem("currentAccount");
 
         if (storedAccount) {
-          setCurrentAccount(storedAccount);
+            setCurrentAccount(storedAccount);
         }
-      }, []);
+    }, []);
 
 
     const connectWallet = async () => {
@@ -171,12 +171,11 @@ export const TransactionsProvider = ({ children }) => {
         return tx.hash;
     }
     const joinGroupAndPay = async (groupID, units, totalPrice) => {
-        console.log(totalPrice, units)
         const provider = new ethers.BrowserProvider(ethereum);
         const signer = await provider.getSigner();
         const contract = new ethers.Contract(contractAddress, contractAbi, signer);
-        const paymentAmountWei = ethers.parseUnits(totalPrice.toString(), 18);
-        const tx = await contract.joinGroupAndPay(groupID, units, {value: paymentAmountWei});
+        const paymentAmountWei = ethers.parseUnits(totalPrice.toString(), 16);
+        const tx = await contract.joinGroupAndPay(groupID, units, { value: paymentAmountWei });
         await tx.wait();
         console.log("Joined");
         return tx.hash;
@@ -191,23 +190,24 @@ export const TransactionsProvider = ({ children }) => {
         return tx.hash;
     };
 
-const getCustomerGroups = async (customerAddress) => {
-  const web3 = new Web3(ethereum);
-  const contract = new web3.eth.Contract(contractAbi, contractAddress);
+    const getCustomerGroups = async (customerAddress) => {
+        const web3 = new Web3(ethereum);
+        const contract = new web3.eth.Contract(contractAbi, contractAddress);
 
-  try {
-    const groupIDs = await contract.methods.getCustomerGroups(customerAddress).call();
-    console.log("Group IDs for customer:", groupIDs);
+        try {
+            const groupIDs = await contract.methods.getCustomerGroups(customerAddress).call();
+            console.log("Group IDs for customer:", groupIDs);
 
-    // Fetch group structs
-    const groupPromises = groupIDs.map((groupID) => contract.methods.groupList(groupID).call());
-    const groups = await Promise.all(groupPromises);
-    console.log("Group structs for customer:", groups);
-    return groups;
-  } catch (error) {
-    console.error("Error fetching customer groups:", error);
-  }
-};
+            // Fetch group structs
+            const groupPromises = groupIDs.map((groupID) => contract.methods.groupList(groupID).call());
+            const groups = await Promise.all(groupPromises);
+            console.log("Group structs for customer:", groups);
+            return groups;
+        } catch (error) {
+            console.error("Error fetching customer groups:", error);
+        }
+    };
+
 
 
     return (

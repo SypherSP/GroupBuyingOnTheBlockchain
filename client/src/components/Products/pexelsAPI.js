@@ -1,5 +1,5 @@
 import { createClient } from "pexels";
-const client = '';
+const client = createClient('EvnJzaVZWlPPdZCQnDiTgwsYL7GB9LY0yxxoXARBfOwlHfIc6sKRkS5u');
 
 async function getPhotoUrl(query) {
   const resp = await(
@@ -11,7 +11,7 @@ async function getPhotoUrl(query) {
       size: "small",
     })
   );
-  const url = resp.photos[0].url;
+  const url = resp.photos[0].src.original;
   return url;
 }
 

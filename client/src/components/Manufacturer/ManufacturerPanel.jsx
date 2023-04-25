@@ -6,7 +6,7 @@ import ManufacturerListings from "../Products/ManufacturerListings";
 import ManufacturerProducts from "../Manufacturer/ManufacturerProducts";
 
 function ManufacturerPanel() {
-  const { getProductsByManufacturer } = useContext(TransactionContext);
+  const { getProductsByManufacturer, } = useContext(TransactionContext);
   const [products, setProducts] = useState([
     {
       name: "calculator",

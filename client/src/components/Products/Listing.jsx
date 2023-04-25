@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
+import { getPhotoUrl } from "./pexelsAPI";
 
 function Listing({
-  imageUrl,
   name,
   description,
   retailPrice,
@@ -15,6 +15,7 @@ function Listing({
   const [quantity, setQuantity] = useState(0);
   const [totalSavings, setTotalSavings] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [imageUrl,setImageUrl] = useState("https://casiofanmag.com/wp-content/uploads/2022/04/ga-2100-utility-black-collection-7-1200x1198.jpg")
 
   const discount = parseFloat(((retailPrice - price) / retailPrice) * 100).toFixed(1);
 
@@ -38,6 +39,14 @@ function Listing({
       handleQuantityChange({ target: { value: newQuantity } });
     }
   };
+  useEffect(() => {
+    async function fetchImage(){
+      const image = await getPhotoUrl(name);
+      // console.log(image)
+      // setImageUrl(image);
+    }
+    fetchImage();
+  },[])
 
 
   return (

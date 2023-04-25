@@ -4,7 +4,7 @@ import { TransactionContext } from "../../context/TransactionContext";
 function ManufacturerListings() {
   const {
     getGroupsByManufacturer,
-    claimEscrowFunds,
+    claimEscrowedFunds,
     closeGroup,
     getAllProductFromProductID,
   } = useContext(TransactionContext);
@@ -40,6 +40,12 @@ function ManufacturerListings() {
                 Product Name
               </th>
               <th scope="col" className="px-6 py-3">
+                Group ID
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Progress
+              </th>
+              <th scope="col" className="px-6 py-3">
                 Accumulated Payment
               </th>
               <th scope="col" className="px-6 py-3">
@@ -66,6 +72,8 @@ function ManufacturerListings() {
                     >
                       {product[listing.pID].name}
                     </th>
+                    <td className="px-6 py-4">{listing.groupID}</td>
+                    <td className="px-6 py-4">{listing.currentSubscription.toString()}/{listing.maxSubscription.toString()}</td>
                     <td className="px-6 py-4">
                       {listing.accumulatedPayment.toString()}
                     </td>
@@ -79,18 +87,18 @@ function ManufacturerListings() {
                         }`}
                         disabled={!listing.isOpen}
                       >
-                        Close
+                        {listing.isOpen ? "Close": "Closed"}
                       </button>
                     </td>
                     <td className="px-6 py-4">
                       <button
-                        onClick={() => claimEscrowFunds(listing.groupID)}
+                        onClick={() => claimEscrowedFunds(listing.groupID)}
                         className={`text-green-700 border border-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:text-green-500 dark:border-green-500 dark:focus:ring-green-800 ${
-                          !listing.isOpen || !listing.isValue
+                          (listing.isOpen && !listing.isValue)
                             ? "cursor-not-allowed opacity-75"
                             : "hover:text-white hover:bg-green-800 dark:hover:bg-green-600 "
                         }`}
-                        disabled={!(listing.isOpen && listing.isValue)}
+                        disabled={!(!listing.isOpen && listing.isValue)}
                       >
                         Withdraw
                       </button>
