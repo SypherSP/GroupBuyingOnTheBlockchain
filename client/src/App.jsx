@@ -9,7 +9,7 @@ import "./App.css";
 function App() {
   return (
     <Router>
-      <div className="bg">
+      <div className="bg h-screen">
         <div className="App">
           <Navbar />
           <Routes>
