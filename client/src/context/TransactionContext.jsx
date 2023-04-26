@@ -216,6 +216,18 @@ export const TransactionsProvider = ({ children }) => {
         }
     };
 
+    const getSubscriptionAmount = async (groupID, userAddress) => {
+      const web3 = new Web3(ethereum);
+      const contract = new web3.eth.Contract(contractAbi, contractAddress);
+      try {
+        const subscriptionAmount = await contract.methods.paymentRecords(groupID, userAddress).call();
+        return subscriptionAmount;
+      } catch (error) {
+        console.error("Error fetching subscription amount:", error);
+        return null;
+      }
+    }
+
 
 
     return (
@@ -242,7 +254,8 @@ export const TransactionsProvider = ({ children }) => {
             closeGroup,
             joinGroupAndPay,
             claimEscrowedFunds,
-            getCustomerGroups
+            getCustomerGroups,
+            getSubscriptionAmount
         }}>
             {children}
         </TransactionContext.Provider>

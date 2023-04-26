@@ -5,7 +5,8 @@ function Account() {
   const [groups, setGroups] = useState([]);
   const [product, setProduct] = useState({});
   const [manufacturer, setManufacturer] = useState([]);
-  const { getCustomerGroups, currentAccount, getAllProductFromProductID, getManufacturerFromID } = useContext(TransactionContext);
+  const [subscriptions, setSubscriptions] = useState({});
+  const { getSubscriptionAmount, getCustomerGroups, currentAccount, getAllProductFromProductID, getManufacturerFromID } = useContext(TransactionContext);
 
   useEffect(() => {
     const fetchCustomerGroups = async () => {
@@ -14,6 +15,14 @@ function Account() {
         let prod = await getAllProductFromProductID(group.pID);
         let manu = await getManufacturerFromID(prod.manufacturerID)
         console.log(manu.phoneNo)
+
+        // Fetch and store the subscription amount for each group
+        const subscriptionAmount = await getSubscriptionAmount(group.groupID, currentAccount);
+        setSubscriptions((prevData) => ({
+          ...prevData,
+          [group.groupID]: subscriptionAmount,
+        }));
+
         setProduct((prevData) => ({
           ...prevData,
           [group.pID]: prod,
@@ -81,7 +90,7 @@ return (
                   <td className="px-6 py-4">{group.groupID}</td>
                   <td className="px-6 py-4">{group.currentSubscription}/{group.maxSubscription}</td>
                   <td className="px-6 py-4">{group.unitValue}</td>
-                  <td className="px-6 py-4">{"dummy"}</td>
+                  <td className="px-6 py-4">{subscriptions[group.groupID] || "0"}</td>
                   <td className="px-6 py-4">{group.isOpen ? 'Open' : 'Closed'}</td>
                   <td className="px-6 py-4">{manufacturer[group.pID] ? manufacturer[group.pID].phoneNo : "Number"}</td>
                 </tr>
