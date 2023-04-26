@@ -4,7 +4,7 @@ import { TransactionContext } from "../../context/TransactionContext";
 
 function AdminPanel() {
   const { getAllManufacturers } = useContext(TransactionContext);
-  const [manufacturerList, setManufacturerList] = useState();
+  const [manufacturerList, setManufacturerList] = useState([]);
   const [manufacturerBoxProperty, setManufacturerBoxProperty] = useState("");
   const [showModal, setShowModal] = useState(false);
 
@@ -49,8 +49,14 @@ function AdminPanel() {
               </tr>
             </thead>
             <tbody>
-              {manufacturerList &&
-                manufacturerList.length !== 0 &&
+              {manufacturerList!==undefined &&
+                manufacturerList.length === 0 ?
+                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                  <td colSpan="7" className="px-6 py-4 font-medium text-gray-400 whitespace-nowrap">
+                    No Manufacturer Added
+                  </td>
+                </tr>
+                :
                 manufacturerList.map((manufacturer) => {
                   return (
                     <tr

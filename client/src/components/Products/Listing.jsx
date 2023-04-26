@@ -31,7 +31,7 @@ function Listing({
   };
 
   const incrementQuantity = () => {
-    if (quantity <= maxSubscription - currentSubscription) {
+    if (quantity <= maxSubscription - currentSubscription -BigInt(1)) {
       const newQuantity = quantity + 1;
       setQuantity(newQuantity);
       handleQuantityChange({ target: { value: newQuantity } });
@@ -54,8 +54,6 @@ function Listing({
     fetchImage();
   }, []);
 
-  console.log(maxSubscription);
-  console.log(currentSubscription);
   return (
     <div>
       <div className="flex flex-col items-center bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl md:flex-row md:max-w-xl hover:bg-gray-100 dark:hover:bg-gray-700">
@@ -104,7 +102,7 @@ function Listing({
                 id="quantity"
                 name="quantity"
                 min="0"
-                max={(maxSubscription - currentSubscription).toString()}
+                max={(maxSubscription - currentSubscription ).toString()}
                 placeholder="0"
                 value={quantity}
                 onChange={handleQuantityChange}

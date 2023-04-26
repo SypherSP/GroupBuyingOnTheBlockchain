@@ -109,6 +109,14 @@ export const TransactionsProvider = ({ children }) => {
         return tx;
     }
 
+    const getManufacturerFromID = async (manufacturerID) => {
+        const provider = new ethers.BrowserProvider(ethereum);
+        const signer = await provider.getSigner();
+        const contract = new ethers.Contract(contractAddress, contractAbi, signer);
+        const tx = await contract.getManufacturerFromID(manufacturerID);
+        return tx;
+    }
+
     const addManufacturer = async () => {
         const provider = new ethers.BrowserProvider(ethereum);
         const signer = await provider.getSigner();
@@ -174,7 +182,7 @@ export const TransactionsProvider = ({ children }) => {
         const provider = new ethers.BrowserProvider(ethereum);
         const signer = await provider.getSigner();
         const contract = new ethers.Contract(contractAddress, contractAbi, signer);
-        const paymentAmountWei = ethers.parseUnits(totalPrice.toString(), 16);
+        const paymentAmountWei = ethers.parseUnits(totalPrice.toString(), 14);
         const tx = await contract.joinGroupAndPay(groupID, units, { value: paymentAmountWei });
         await tx.wait();
         console.log("Joined");
@@ -227,6 +235,7 @@ export const TransactionsProvider = ({ children }) => {
             getGroupsByManufacturer,
             getProductsByCustomer,
             getAllProductFromProductID,
+            getManufacturerFromID,
             getAllManufacturers,
             getAllGroups,
             registerCustomer,

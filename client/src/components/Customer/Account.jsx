@@ -3,11 +3,26 @@ import { TransactionContext } from '../../context/TransactionContext';
 
 function Account() {
   const [groups, setGroups] = useState([]);
-  const { getCustomerGroups, currentAccount } = useContext(TransactionContext);
+  const [product, setProduct] = useState({});
+  const [manufacturer, setManufacturer] = useState([]);
+  const { getCustomerGroups, currentAccount, getAllProductFromProductID, getManufacturerFromID } = useContext(TransactionContext);
 
   useEffect(() => {
     const fetchCustomerGroups = async () => {
       const customerGroups = await getCustomerGroups(currentAccount);
+      customerGroups.map(async (group) => {
+        let prod = await getAllProductFromProductID(group.pID);
+        let manu = await getManufacturerFromID(prod.manufacturerID)
+        console.log(manu.phoneNo)
+        setProduct((prevData) => ({
+          ...prevData,
+          [group.pID]: prod,
+        }));
+        setManufacturer((prevData) => ({
+          ...prevData,
+          [group.pID]: manu,
+        }))
+      })
       setGroups(customerGroups);
     };
 
@@ -30,22 +45,25 @@ return (
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
               <th scope="col" className="px-6 py-3">
+                Product Name
+              </th>
+              <th scope="col" className="px-6 py-3">
                 Group ID
               </th>
               <th scope="col" className="px-6 py-3">
-                Product ID
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Max Subscription
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Current Subscription
+                Progress
               </th>
               <th scope="col" className="px-6 py-3">
                 Unit Value
               </th>
               <th scope="col" className="px-6 py-3">
-                Open
+                Your Subscription
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Group Status
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Manufacturer Contact
               </th>
             </tr>
           </thead>
@@ -58,13 +76,14 @@ return (
               </tr>
             ) : (
               groups.map((group, index) => (
-                <tr key={index} className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                <tr key={index} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                  <td className="px-6 py-4">{product[group.pID] ? product[group.pID].name : "Product Name"}</td>
                   <td className="px-6 py-4">{group.groupID}</td>
-                  <td className="px-6 py-4">{group.pID}</td>
-                  <td className="px-6 py-4">{group.maxSubscription}</td>
-                  <td className="px-6 py-4">{group.currentSubscription}</td>
+                  <td className="px-6 py-4">{group.currentSubscription}/{group.maxSubscription}</td>
                   <td className="px-6 py-4">{group.unitValue}</td>
-                  <td className="px-6 py-4">{group.isOpen ? 'Yes' : 'No'}</td>
+                  <td className="px-6 py-4">{"dummy"}</td>
+                  <td className="px-6 py-4">{group.isOpen ? 'Open' : 'Closed'}</td>
+                  <td className="px-6 py-4">{manufacturer[group.pID] ? manufacturer[group.pID].phoneNo : "Number"}</td>
                 </tr>
               ))
             )}

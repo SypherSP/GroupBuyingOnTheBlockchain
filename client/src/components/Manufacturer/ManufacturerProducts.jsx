@@ -3,7 +3,7 @@ import { TransactionContext } from "../../context/TransactionContext";
 
 function ManufacturerProducts() {
   const { getProductsByManufacturer } = useContext(TransactionContext);
-  const [products, setProducts] = useState();
+  const [products, setProducts] = useState([]);
   useEffect(() => {
     async function fetchData() {
       let data = await getProductsByManufacturer();
@@ -36,7 +36,13 @@ function ManufacturerProducts() {
           </thead>
           <tbody>
             {products &&
-              products.length !== 0 &&
+              products.length === 0 ?
+              <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                  <td colSpan="7" className="px-6 py-4 font-medium text-gray-400 whitespace-nowrap">
+                    No Product Added
+                  </td>
+                </tr>
+              :
               products.map((product) => {
                 return (
                   <tr
