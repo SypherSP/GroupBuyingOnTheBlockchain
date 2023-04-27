@@ -40,8 +40,8 @@ function MarketListings() {
               price={Number(listing.unitValue)}
               contact={undefined}
               groupID={listing.groupID}
-              currentSubscription={listing.currentSubscription}
-              maxSubscription={listing.maxSubscription}
+              currentSubscription={Number(listing.currentSubscription)}
+              maxSubscription={Number(listing.maxSubscription)}
               onSubscribe={(totalPrice, units) => handleSubscribe(totalPrice, units, listing.groupID)}
             />
           ) : (
