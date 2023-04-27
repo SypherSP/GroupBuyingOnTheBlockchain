@@ -16,7 +16,7 @@ function Listing({
   const [totalSavings, setTotalSavings] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
   const [imageUrl, setImageUrl] = useState(
-    "https://casiofanmag.com/wp-content/uploads/2022/04/ga-2100-utility-black-collection-7-1200x1198.jpg"
+    "https://ingoodcompany.asia/images/products_attr_img/matrix/default.png"
   );
 
   const discount = parseFloat(
@@ -49,7 +49,7 @@ function Listing({
     async function fetchImage() {
       const image = await getPhotoUrl(name);
       // console.log(image)
-      // setImageUrl(image);
+      setImageUrl(image);
     }
     fetchImage();
   }, []);
@@ -79,10 +79,12 @@ function Listing({
               ${price}
             </div>
           </div>
+      {/*
           <div className="text-gray-800 dark:text-gray-200">
             Contact Manufacturer: {contact}
           </div>
-          <div className="flex content-center">
+        */}
+          <div className="m-2 flex content-center">
             <div className="mr-1 text-gray-800 dark:text-gray-200">
               {currentSubscription}/{maxSubscription}
             </div>
