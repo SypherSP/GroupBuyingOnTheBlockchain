@@ -1,5 +1,5 @@
 #Group Buying On Blockchain
-This project is about group buying marketplace on blockchain.
+This project is a prototype to demonstrate group buying on the blockchain.
 
 ---
 ## Quick Start
