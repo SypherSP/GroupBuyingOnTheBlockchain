@@ -1,4 +1,4 @@
-#Group Buying On Blockchain
+# Group Buying On Blockchain
 
 This project is a prototype to demonstrate group buying on the blockchain.
 
